@@ -1,43 +1,26 @@
-package com.calvinnordstrom.cnpaint.util;
-
-import com.calvinnordstrom.cnpaint.view.EditorControlsPane;
-import com.calvinnordstrom.cnpaint.view.EditorPane;
-import javafx.scene.Node;
-import javafx.scene.control.MenuItem;
+package com.calvinnordstrom.cnboard.util;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ServiceLocator {
     private static ServiceLocator instance;
-    private final Map<String, MenuItem> menuItems = new HashMap<>();
-    private final Map<EditorPane, EditorControlsPane> editorPanes = new HashMap<>();
-    private final Map<String, Node> nodes = new HashMap<>();
+    private final Map<String, Object> services = new HashMap<>();
 
     private ServiceLocator() {}
 
-    public void register(String key, MenuItem value) {
-        menuItems.put(key, value);
+    public <T> void register(String key, T service) {
+        services.put(key, service);
     }
 
-    public MenuItem getMenuItem(String key) {
-        return menuItems.get(key);
-    }
-
-    public void register(EditorPane key, EditorControlsPane value) {
-        editorPanes.put(key, value);
-    }
-
-    public EditorControlsPane getEditorControlsPane(EditorPane key) {
-        return editorPanes.get(key);
-    }
-
-    public void register(String key, Node value) {
-        nodes.put(key, value);
-    }
-
-    public Node getNode(String key) {
-        return nodes.get(key);
+    @SuppressWarnings("unchecked")
+    public <T> T get(String key, Class<T> type) {
+        Object service = services.get(key);
+        if (type.isInstance(service)) {
+            return (T) service;
+        } else {
+            throw new IllegalArgumentException("Service not found for key: " + key);
+        }
     }
 
     public static ServiceLocator getInstance() {

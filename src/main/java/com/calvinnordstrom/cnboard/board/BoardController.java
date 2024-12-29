@@ -1,6 +1,6 @@
-package com.calvinnordstrom.cnboard.soundboard;
+package com.calvinnordstrom.cnboard.board;
 
-import com.calvinnordstrom.cnboard.view.BoardView;
+import com.calvinnordstrom.cnboard.board.view.BoardView;
 import javafx.scene.Parent;
 
 public class BoardController {

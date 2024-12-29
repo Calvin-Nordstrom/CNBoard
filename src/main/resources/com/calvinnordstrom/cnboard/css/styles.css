@@ -6,3 +6,74 @@
   -cn-text-color: white;
 }
 
+.button-width-80 {
+  -fx-min-width: 80;
+}
+
+.sounds-pane {
+  -fx-padding: 10px;
+  -fx-hgap: 10;
+  -fx-vgap: 10;
+}
+
+.sound-node {
+  -fx-alignment: center;
+  -fx-cursor: hand;
+}
+
+.sound-control {
+  -fx-min-width: 200;
+  -fx-max-width: 200;
+  -fx-spacing: 10;
+  -fx-alignment: top-center;
+  -fx-padding: 10px;
+  /* -fx-background-color: -cn-pane-color; */
+
+  /* -fx-border-style: solid;
+  -fx-border-width: 0 0 0 1;
+  -fx-border-color: -cn-border-color; */
+}
+
+.sound-control_playback-control {
+  -fx-spacing: 10;
+}
+
+.sound-control_delete-control {
+  -fx-alignment: bottom-center;
+}
+
+.control_label-pane {
+  -fx-alignment: center-left;
+}
+
+.slider-control_slider {
+  -fx-pref-width: 128;
+}
+
+.slider-control_slider-pane {
+  -fx-alignment: center;
+}
+
+.slider-control_text-field {
+  -fx-pref-width: 56;
+}
+
+.slider-control_symbol-pane {
+  -fx-min-width: 16;
+  -fx-alignment: center-left;
+}
+
+.slider-control_hbox {
+  -fx-spacing: 5;
+  -fx-alignment: center-left;
+}
+
+.file-control_file-pane {
+  -fx-spacing: 5;
+  -fx-alignment: center-left;
+}
+
+.keybind-control_keybind-pane {
+  -fx-spacing: 5;
+  -fx-alignment: center-left;
+}

@@ -1,28 +1,44 @@
 package com.calvinnordstrom.cnboard.board.view;
 
 import com.calvinnordstrom.cnboard.board.Sound;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
-public class SoundPane extends VBox {
+import static com.calvinnordstrom.cnboard.util.Utils.getImage;
+
+public class SoundNode extends VBox {
     private final Sound sound;
 
-    public SoundPane(Sound sound) {
+    public SoundNode(Sound sound) {
         this.sound = sound;
 
         init();
     }
 
     private void init() {
-        setAlignment(Pos.CENTER);
+        Image icon = getImage(sound.getIconFile());
+        ImageView iconView = new ImageView(icon);
+        iconView.setFitWidth(80);
+        iconView.setFitHeight(80);
+        sound.iconFileProperty().addListener((_, _, newValue) -> {
+            Image image = getImage(newValue);
+            iconView.setImage(image);
+        });
 
         Label titleLabel = new Label(sound.getTitle());
-        getChildren().add(titleLabel);
+        titleLabel.textProperty().bind(sound.titleProperty());
 
         String keyCode = NativeKeyEvent.getKeyText(sound.getKeyCode());
         Label keyCodeLabel = new Label(keyCode);
-        getChildren().add(keyCodeLabel);
+        sound.keyCodeProperty().addListener((_, _, newValue) -> {
+            keyCodeLabel.setText(NativeKeyEvent.getKeyText((int) newValue));
+        });
+
+        getChildren().addAll(iconView, titleLabel, keyCodeLabel);
+
+        getStyleClass().add("sound-node");
     }
 }

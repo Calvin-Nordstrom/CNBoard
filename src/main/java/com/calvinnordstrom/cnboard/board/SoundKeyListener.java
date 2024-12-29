@@ -10,20 +10,20 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GlobalKeyListener implements NativeKeyListener {
+public class SoundKeyListener implements NativeKeyListener {
     private final ObservableList<Sound> sounds;
     private final Set<Integer> activeKeys = new HashSet<>();
 
-    public GlobalKeyListener(ObservableList<Sound> sounds) {
+    public SoundKeyListener(ObservableList<Sound> sounds) {
         this.sounds = sounds;
     }
 
     @Override
-    public void nativeKeyTyped(NativeKeyEvent e) {}
+    public void nativeKeyTyped(NativeKeyEvent event) {}
 
     @Override
-    public void nativeKeyPressed(NativeKeyEvent e) {
-        int keyCode = e.getKeyCode();
+    public void nativeKeyPressed(NativeKeyEvent event) {
+        int keyCode = event.getKeyCode();
         if (!activeKeys.contains(keyCode)) {
             for (Sound sound : sounds) {
                 if (sound.getKeyCode() == keyCode) {
@@ -40,8 +40,8 @@ public class GlobalKeyListener implements NativeKeyListener {
                             clip.start();
                         } catch (UnsupportedAudioFileException
                                  | IOException
-                                 | LineUnavailableException ex) {
-                            throw new RuntimeException(ex);
+                                 | LineUnavailableException e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 }
@@ -51,7 +51,7 @@ public class GlobalKeyListener implements NativeKeyListener {
     }
 
     @Override
-    public void nativeKeyReleased(NativeKeyEvent e) {
-        activeKeys.remove(e.getKeyCode());
+    public void nativeKeyReleased(NativeKeyEvent event) {
+        activeKeys.remove(event.getKeyCode());
     }
 }
