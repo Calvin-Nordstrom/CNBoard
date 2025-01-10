@@ -1,37 +1,100 @@
 * {
-  -cn-editor-color: rgb(80, 80, 80);
-  -cn-pane-color: rgb(64, 64, 64);
-  -cn-border-color: black;
-  -cn-tool-border-color: white;
-  -cn-text-color: white;
+  -cn-pane-color1: #202020;
+  -cn-pane-color2: #383838;
+  -cn-border-color: #000000;
+
+  -cn-text-color: #dddddd;
+  -cn-gray1: #777777;
+  -cn-gray2: #888888;
+
+  -cn-sound-bg-color: #343434;
+  -cn-selected-sound-border-color: #686868;
+  -cn-selected-sound-bg-color: #555555;
+  -cn-hovered-sound-bg-color: #484848;
+
+  -cn-focused-border: #60a0d0;
+  -cn-hovered-border: #7ab0e3;
+  
+  -cn-control-bg-color: #282828;
+  -cn-control-border-color: #444444;
+  -cn-hovered-control-bg-color: #313131;
+  -cn-control-pressed-bg-color: #1f1f1f;
 }
 
-.button-width-80 {
-  -fx-min-width: 80;
+.button-width-100 {
+  -fx-min-width: 100;
+}
+
+.text {
+  -fx-text-fill: -cn-text-color;
+}
+
+.title {
+  -fx-font-size: 14;
 }
 
 .sounds-pane {
-  -fx-padding: 10px;
-  -fx-hgap: 10;
-  -fx-vgap: 10;
+  /* -fx-min-height: 540; */
+  -fx-padding: 15;
+  -fx-hgap: 15;
+  -fx-vgap: 15;
+  -fx-background-color: -cn-pane-color1;
+}
+
+.sounds-scrollpane {
+  -fx-background-color: -cn-pane-color1;
+}
+
+.sounds-scrollpane:focused {
+  -fx-background-color: -cn-pane-color1;
+  -fx-background-insets: -1 -1 -1 0;
+  -fx-padding: 1;
 }
 
 .sound-node {
+  -fx-pref-width: 160;
+  -fx-padding: 10;
+  -fx-spacing: 5;
   -fx-alignment: center;
   -fx-cursor: hand;
+  -fx-border-color: transparent;
+  -fx-border-width: 1;
+  -fx-background-color: -cn-sound-bg-color;
+  -fx-background-radius: 10;
+  -fx-border-radius: 10;
+}
+
+.sound-node:hover {
+  -fx-background-color: -cn-hovered-sound-bg-color;
+}
+
+.sound-node:hover .selected {
+  -fx-background-color: -cn-selected-sound-bg-color;
+}
+
+.sound-node_title {
+  -fx-max-width: 160;
+  -fx-text-alignment: center;
+  -fx-alignment: center;
+}
+
+.selected {
+  -fx-padding: 10;
+  -fx-border-insets: 0 0 0 0;
+  -fx-background-color: -cn-selected-sound-bg-color;
+  -fx-border-color: -cn-selected-sound-border-color;
 }
 
 .sound-control {
-  -fx-min-width: 200;
-  -fx-max-width: 200;
-  -fx-spacing: 10;
+  -fx-min-width: 256;
+  -fx-max-width: 256;
+  -fx-spacing: 15;
   -fx-alignment: top-center;
-  -fx-padding: 10px;
-  /* -fx-background-color: -cn-pane-color; */
-
-  /* -fx-border-style: solid;
-  -fx-border-width: 0 0 0 1;
-  -fx-border-color: -cn-border-color; */
+  -fx-padding: 20 10 20 10;
+  -fx-background-color: -cn-pane-color2;
+  -fx-border-style: solid;
+  -fx-border-width: 0 1 0 0;
+  -fx-border-color: -cn-border-color;
 }
 
 .sound-control_playback-control {
@@ -47,7 +110,7 @@
 }
 
 .slider-control_slider {
-  -fx-pref-width: 128;
+  -fx-pref-width: 160;
 }
 
 .slider-control_slider-pane {
@@ -55,7 +118,7 @@
 }
 
 .slider-control_text-field {
-  -fx-pref-width: 56;
+  -fx-pref-width: 64;
 }
 
 .slider-control_symbol-pane {
@@ -76,4 +139,142 @@
 .keybind-control_keybind-pane {
   -fx-spacing: 5;
   -fx-alignment: center-left;
+}
+
+.board-control-pane {
+  -fx-alignment: center-left;
+  -fx-background-color: -cn-pane-color2;
+  -fx-border-style: solid;
+  -fx-border-width: 1 0 0 0;
+  -fx-border-color: -cn-border-color;
+}
+
+.board-control {
+  -fx-alignment: center-left;
+  -fx-padding: 10;
+}
+
+.text-field {
+  -fx-background-color: -cn-control-bg-color;
+  -fx-text-fill: -cn-text-color;
+  -fx-prompt-text-fill: -cn-gray2;
+  -fx-background-radius: 5;
+  -fx-border-radius: 5;
+  -fx-border-color: -cn-control-border-color;
+  -fx-border-width: 1;
+  -fx-padding: 5;
+}
+
+.text-field:focused {
+  -fx-border-color: -cn-focused-border;
+  -fx-background-color: -cn-hovered-control-bg-color;
+}
+
+.button {
+  -fx-background-color: -cn-control-bg-color;
+  -fx-text-fill: -cn-text-color;
+  -fx-background-radius: 5;
+  -fx-border-radius: 5;
+  -fx-border-color: -cn-control-border-color;
+  -fx-border-width: 1;
+  -fx-padding: 8 16;
+  -fx-cursor: hand;
+}
+
+.button:hover {
+  -fx-background-color:  -cn-hovered-control-bg-color;
+}
+
+.button:focused {
+  -fx-border-color: -cn-focused-border;
+  -fx-background-color:  -cn-hovered-control-bg-color;
+}
+
+.button:pressed {
+  -fx-background-color: -cn-control-pressed-bg-color;
+  -fx-effect: none;
+}
+
+.check-box {
+  -fx-text-fill: -cn-text-color;
+  -fx-font-size: 14;
+}
+
+.check-box .box {
+  -fx-border-color: -cn-control-border-color;
+  -fx-border-radius: 3;
+  -fx-border-width: 1;
+  -fx-background-color: -cn-control-bg-color;
+  -fx-padding: 2;
+}
+
+.check-box:selected .box {
+  -fx-background-color: -cn-focused-border;
+  -fx-border-color: -cn-focused-border;
+}
+
+.check-box:hover .box {
+  -fx-border-color: -cn-gray2;
+}
+
+.check-box:focused .box {
+  -fx-border-color: -cn-focused-border;
+}
+
+.slider {
+  -fx-background-color: transparent;
+}
+
+.slider .track {
+  -fx-background-color: -cn-gray1;
+  -fx-background-radius: 3;
+  -fx-padding: 2;
+}
+
+.slider .thumb {
+  -fx-background-color: -cn-focused-border;
+  -fx-background-radius: 10;
+}
+
+.slider:hover .thumb {
+  -fx-background-color: -cn-hovered-border;
+}
+
+.slider .tick {
+  -fx-background-color: -cn-gray2;
+  -fx-font-size: 10px;
+  -fx-text-fill: -cn-text-color;
+}
+
+.scroll-bar {
+  -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+  -fx-background-color: -cn-control-border-color;
+  -fx-background-radius: 5;
+}
+
+.scroll-bar .thumb:hover {
+  -fx-background-color: -cn-hovered-border;
+}
+
+.scroll-bar .track {
+  -fx-background-color: -cn-control-bg-color;
+  -fx-border-color: -cn-control-border-color;
+  -fx-border-width: 1;
+}
+
+.vertical-divider {
+  -fx-max-width: 1;
+  -fx-border-style: solid;
+  -fx-border-width: 0 1 0 0;
+  -fx-border-color: -cn-border-color;
+}
+
+.horizontal-divider {
+  -fx-max-height: 1;
+  -fx-border-style: solid;
+  -fx-border-width: 1 0 0 0;
+  -fx-border-color: -cn-border-color;
 }

@@ -23,6 +23,9 @@ public class ToggleControl extends HBox {
 
     private void init() {
         getChildren().add(checkBox);
+
+        checkBox.getStyleClass().addAll("text", "title");
+        getStyleClass().add("control_label-pane");
     }
 
     private void initEventHandlers() {

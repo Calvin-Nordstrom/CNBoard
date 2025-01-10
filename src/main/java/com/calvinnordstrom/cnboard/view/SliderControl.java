@@ -20,7 +20,7 @@ public class SliderControl extends VBox {
         value = new SimpleDoubleProperty(val);
         label = new Label(text);
         slider = new Slider(min, max, val);
-        textField = new TextField(String.valueOf(val));
+        textField = new TextField(format(val));
         symbolLabel = new Label(symbol);
 
         boundValue.bindBidirectional(value);
@@ -36,10 +36,12 @@ public class SliderControl extends VBox {
         HBox hbox = new HBox(sliderPane, textField, symbolPane);
         getChildren().addAll(labelPane, hbox);
 
+        label.getStyleClass().addAll("text", "title");
         labelPane.getStyleClass().add("control_label-pane");
         slider.getStyleClass().add("slider-control_slider");
         sliderPane.getStyleClass().add("slider-control_slider-pane");
         textField.getStyleClass().add("slider-control_text-field");
+        symbolLabel.getStyleClass().addAll("text", "title");
         symbolPane.getStyleClass().add("slider-control_symbol-pane");
         hbox.getStyleClass().add("slider-control_hbox");
     }
@@ -47,7 +49,7 @@ public class SliderControl extends VBox {
     private void initEventHandlers() {
         slider.valueProperty().bindBidirectional(value);
         value.addListener((_, _, newValue) -> {
-            textField.setText(String.format("%.2f", newValue.doubleValue()));
+            textField.setText(format(newValue.doubleValue()));
         });
         textField.setOnAction(_ -> {
             try {
@@ -55,11 +57,15 @@ public class SliderControl extends VBox {
                 if (newValue >= slider.getMin() && newValue <= slider.getMax()) {
                     value.set(newValue);
                 } else {
-                    textField.setText(String.format("%.2f", value.get()));
+                    textField.setText(format(value.get()));
                 }
             } catch (NumberFormatException e) {
-                textField.setText(String.format("%.2f", value.get()));
+                textField.setText(format(value.get()));
             }
         });
+    }
+
+    private String format(double value) {
+        return String.format("%.2f", value);
     }
 }

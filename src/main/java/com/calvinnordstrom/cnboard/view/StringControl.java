@@ -31,8 +31,9 @@ public class StringControl extends VBox {
         getChildren().addAll(labelPane, textFieldPane);
 
         HBox.setHgrow(textField, Priority.ALWAYS);
-
+        label.getStyleClass().addAll("text", "title");
         labelPane.getStyleClass().add("control_label-pane");
+        textField.getStyleClass().add("text-field");
     }
 
     private void initEventHandlers() {

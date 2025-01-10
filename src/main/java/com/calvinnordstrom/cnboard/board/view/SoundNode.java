@@ -23,6 +23,7 @@ public class SoundNode extends VBox {
         ImageView iconView = new ImageView(icon);
         iconView.setFitWidth(80);
         iconView.setFitHeight(80);
+        iconView.setSmooth(true);
         sound.iconFileProperty().addListener((_, _, newValue) -> {
             Image image = getImage(newValue);
             iconView.setImage(image);
@@ -30,6 +31,7 @@ public class SoundNode extends VBox {
 
         Label titleLabel = new Label(sound.getTitle());
         titleLabel.textProperty().bind(sound.titleProperty());
+        titleLabel.setWrapText(true);
 
         String keyCode = NativeKeyEvent.getKeyText(sound.getKeyCode());
         Label keyCodeLabel = new Label(keyCode);
@@ -40,5 +42,12 @@ public class SoundNode extends VBox {
         getChildren().addAll(iconView, titleLabel, keyCodeLabel);
 
         getStyleClass().add("sound-node");
+        iconView.getStyleClass().add("sound-node_icon-view");
+        titleLabel.getStyleClass().addAll("text", "title", "sound-node_title");
+        keyCodeLabel.getStyleClass().add("text");
+    }
+
+    public Sound getSound() {
+        return sound;
     }
 }
