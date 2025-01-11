@@ -4,6 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -34,11 +35,14 @@ public class FileControl extends VBox {
 
     private void init() {
         HBox labelPane = new HBox(label);
+        fileName.setTooltip(new Tooltip(value.getValue().getName()));
         HBox filePane = new HBox(fileButton, fileName);
         getChildren().addAll(labelPane, filePane);
 
+        label.getStyleClass().addAll("text", "title");
         labelPane.getStyleClass().add("control_label-pane");
-        fileButton.getStyleClass().add("button-width-80");
+        fileButton.getStyleClass().add("button-width-100");
+        fileName.getStyleClass().add("text");
         filePane.getStyleClass().add("file-control_file-pane");
     }
 
@@ -52,7 +56,9 @@ public class FileControl extends VBox {
 
             if (selectedFile != null) {
                 value.set(selectedFile);
-                fileName.setText(selectedFile.getName());
+                String selectedFileName = selectedFile.getName();
+                fileName.setText(selectedFileName);
+                fileName.setTooltip(new Tooltip(selectedFileName));
             }
         });
     }

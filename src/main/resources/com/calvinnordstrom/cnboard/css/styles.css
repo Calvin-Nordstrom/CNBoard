@@ -1,6 +1,7 @@
 * {
   -cn-pane-color1: #202020;
   -cn-pane-color2: #383838;
+  -cn-pane-color3: #585858;
   -cn-border-color: #000000;
 
   -cn-text-color: #dddddd;
@@ -8,7 +9,7 @@
   -cn-gray2: #888888;
 
   -cn-sound-bg-color: #343434;
-  -cn-selected-sound-border-color: #686868;
+  -cn-selected-sound-border-color: #777777;
   -cn-selected-sound-bg-color: #555555;
   -cn-hovered-sound-bg-color: #484848;
 
@@ -34,7 +35,6 @@
 }
 
 .sounds-pane {
-  /* -fx-min-height: 540; */
   -fx-padding: 15;
   -fx-hgap: 15;
   -fx-vgap: 15;
@@ -53,10 +53,12 @@
 
 .sound-node {
   -fx-pref-width: 160;
+  -fx-max-width: 160;
+  -fx-pref-height: 160;
+  -fx-max-height: 160;
   -fx-padding: 10;
   -fx-spacing: 5;
   -fx-alignment: center;
-  -fx-cursor: hand;
   -fx-border-color: transparent;
   -fx-border-width: 1;
   -fx-background-color: -cn-sound-bg-color;
@@ -66,6 +68,8 @@
 
 .sound-node:hover {
   -fx-background-color: -cn-hovered-sound-bg-color;
+  -fx-scale-x: 1.025;
+  -fx-scale-y: 1.025;
 }
 
 .sound-node:hover .selected {
@@ -78,11 +82,13 @@
   -fx-alignment: center;
 }
 
-.selected {
+.selected-sound {
   -fx-padding: 10;
   -fx-border-insets: 0 0 0 0;
   -fx-background-color: -cn-selected-sound-bg-color;
   -fx-border-color: -cn-selected-sound-border-color;
+  -fx-scale-x: 1.025;
+  -fx-scale-y: 1.025;
 }
 
 .sound-control {
@@ -147,6 +153,8 @@
   -fx-border-style: solid;
   -fx-border-width: 1 0 0 0;
   -fx-border-color: -cn-border-color;
+  -fx-spacing: 15;
+  -fx-padding: 10;
 }
 
 .board-control {
@@ -163,6 +171,7 @@
   -fx-border-color: -cn-control-border-color;
   -fx-border-width: 1;
   -fx-padding: 5;
+  -fx-focus-traversable: false;
 }
 
 .text-field:focused {
@@ -178,7 +187,7 @@
   -fx-border-color: -cn-control-border-color;
   -fx-border-width: 1;
   -fx-padding: 8 16;
-  -fx-cursor: hand;
+  -fx-focus-traversable: false;
 }
 
 .button:hover {
@@ -198,6 +207,7 @@
 .check-box {
   -fx-text-fill: -cn-text-color;
   -fx-font-size: 14;
+  -fx-focus-traversable: false;
 }
 
 .check-box .box {
@@ -223,6 +233,7 @@
 
 .slider {
   -fx-background-color: transparent;
+  -fx-focus-traversable: false;
 }
 
 .slider .track {
@@ -242,7 +253,7 @@
 
 .slider .tick {
   -fx-background-color: -cn-gray2;
-  -fx-font-size: 10px;
+  -fx-font-size: 10;
   -fx-text-fill: -cn-text-color;
 }
 
@@ -278,3 +289,70 @@
   -fx-border-width: 1 0 0 0;
   -fx-border-color: -cn-border-color;
 }
+
+.title-bar {
+  -fx-background-color: -cn-pane-color3;
+  -fx-border-style: solid;
+  -fx-border-width: 0 0 1 0;
+  -fx-border-color: -cn-border-color;
+}
+
+.title-bar_text {
+  -fx-text-fill: white;
+  -fx-font-size: 18;
+}
+
+.title-bar_left {
+  -fx-alignment: center-left;
+  -fx-padding: 10;
+  -fx-spacing: 10;
+}
+
+.title-bar_button {
+  -fx-pref-width: 50;
+  -fx-focus-traversable: false;
+  -fx-font-size: 18;
+  -fx-padding: 0;
+  -fx-border-radius: 0;
+  -fx-background-radius: 0;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+
+}
+
+.title-bar_button:hover {
+
+}
+
+.title-bar_close-button:hover {
+  -fx-background-color: red;
+}
+
+.title-bar_right {
+
+}
+
+/* .button {
+  -fx-background-color: -cn-control-bg-color;
+  -fx-text-fill: -cn-text-color;
+  -fx-background-radius: 5;
+  -fx-border-radius: 5;
+  -fx-border-color: -cn-control-border-color;
+  -fx-border-width: 1;
+  -fx-padding: 8 16;
+  -fx-cursor: hand;
+}
+
+.button:hover {
+  -fx-background-color:  -cn-hovered-control-bg-color;
+}
+
+.button:focused {
+  -fx-border-color: -cn-focused-border;
+  -fx-background-color:  -cn-hovered-control-bg-color;
+}
+
+.button:pressed {
+  -fx-background-color: -cn-control-pressed-bg-color;
+  -fx-effect: none;
+} */

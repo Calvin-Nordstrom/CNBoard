@@ -1,4 +1,4 @@
-package com.calvinnordstrom.cnboard.board.view;
+package com.calvinnordstrom.cnboard.view;
 
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
@@ -36,8 +36,10 @@ public class KeybindControl extends VBox implements NativeKeyListener {
         HBox keybindPane = new HBox(keybindButton, keyCodeLabel);
         getChildren().addAll(labelPane, keybindPane);
 
+        label.getStyleClass().addAll("text", "title");
         labelPane.getStyleClass().add("control_label-pane");
-        keybindButton.getStyleClass().add("button-width-80");
+        keybindButton.getStyleClass().add("button-width-100");
+        keyCodeLabel.getStyleClass().addAll("text", "title");
         keybindPane.getStyleClass().add("keybind-control_keybind-pane");
     }
 

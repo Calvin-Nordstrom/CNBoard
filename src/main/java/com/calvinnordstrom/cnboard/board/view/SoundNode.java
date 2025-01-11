@@ -31,7 +31,6 @@ public class SoundNode extends VBox {
 
         Label titleLabel = new Label(sound.getTitle());
         titleLabel.textProperty().bind(sound.titleProperty());
-        titleLabel.setWrapText(true);
 
         String keyCode = NativeKeyEvent.getKeyText(sound.getKeyCode());
         Label keyCodeLabel = new Label(keyCode);

@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.jnativehook.GlobalScreen;
@@ -50,6 +51,8 @@ public class SoundControl extends VBox {
         FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.bmp");
         FileControl iconFileControl = new FileControl("Icon file", sound.iconFileProperty(), imageFilter);
 
+        Pane divider1 = new Pane();
+
         SliderControl volumeControl = new SliderControl("Volume", 0, 100, sound.volumeProperty(), "%");
 
         LocalAudioPlayer player = LocalAudioPlayer.getInstance();
@@ -59,12 +62,16 @@ public class SoundControl extends VBox {
         stopButton.setOnMouseClicked(_ -> player.stop());
         HBox playbackControl = new HBox(startButton, stopButton);
 
+        Pane divider2 = new Pane();
+
         Button deleteButton = new Button("Delete");
         HBox deleteControl = new HBox(deleteButton);
 
-        getChildren().addAll(iconView, titleControl, keybindControl, enabledControl, soundFileControl, iconFileControl, volumeControl, playbackControl, deleteControl);
+        getChildren().addAll(iconView, titleControl, keybindControl, enabledControl, soundFileControl, iconFileControl, divider1, volumeControl, playbackControl, divider2, deleteControl);
 
         getStyleClass().add("sound-control");
+        divider1.getStyleClass().add("horizontal-divider");
+        divider2.getStyleClass().add("horizontal-divider");
         playbackControl.getStyleClass().add("sound-control_playback-control");
         deleteControl.getStyleClass().add("sound-control_delete-control");
     }

@@ -74,12 +74,14 @@ public class BoardView extends BorderPane {
         VBox pane1 = new VBox(hearSoundsControl);
         Pane divider1 = new Pane();
         VBox pane2 = new VBox(stopSoundsControl);
-        HBox boardControlPane = new HBox(pane1, divider1, pane2);
+        Pane divider2 = new Pane();
+        HBox boardControlPane = new HBox(pane1, divider1, pane2, divider2);
         setBottom(boardControlPane);
 
         pane1.getStyleClass().add("board-control");
         divider1.getStyleClass().add("vertical-divider");
         pane2.getStyleClass().add("board-control");
+        divider2.getStyleClass().add("vertical-divider");
         boardControlPane.getStyleClass().add("board-control-pane");
     }
 
@@ -89,9 +91,9 @@ public class BoardView extends BorderPane {
         setLeft(soundControl);
 
         if (selectedSound != null) {
-            selectedSound.getStyleClass().remove("selected");
+            selectedSound.getStyleClass().remove("selected-sound");
         }
         selectedSound = soundNode;
-        soundNode.getStyleClass().add("selected");
+        soundNode.getStyleClass().add("selected-sound");
     }
 }
