@@ -1,0 +1,398 @@
+* {
+  -cn-pane-color1: #202020;
+  -cn-pane-color2: #383838;
+  -cn-pane-color3: #585858;
+  -cn-border-color: #000000;
+
+  -cn-text-color1: #dddddd;
+  -cn-text-color2: #ffffff;
+  -cn-gray1: #777777;
+  -cn-gray2: #888888;
+
+  -cn-sound-bg-color: #343434;
+  -cn-sound-selected-bg-color: #555555;
+  -cn-sound-selected-border-color: #777777;
+  -cn-sound-hovered-bg-color: #484848;
+
+  -cn-focused-border: #60a0d0;
+  -cn-hovered-border: #7ab0e3;
+  
+  -cn-control-bg-color: #282828;
+  -cn-control-border-color: #444444;
+  -cn-control-hovered-bg-color: #313131;
+  -cn-control-pressed-bg-color: #1f1f1f;
+
+  -cn-delete-bg-color: #c04040;
+  -cn-delete-border-color: #202020;
+  -cn-delete-hovered-bg-color: #a03030;
+  -cn-delete-pressed-bg-color: #802020;
+
+  -cn-new-bg-color: #60a0d0;
+  -cn-new-border-color: #ffffff;
+  -cn-new-hovered-bg-color: #008cd0;
+  -cn-new-pressed-bg-color: #2870b4;
+}
+
+.text-field {
+  -fx-background-color: -cn-control-bg-color;
+  -fx-text-fill: -cn-text-color1;
+  -fx-prompt-text-fill: -cn-gray2;
+  -fx-background-radius: 5;
+  -fx-border-radius: 5;
+  -fx-border-color: -cn-control-border-color;
+  -fx-padding: 5;
+  -fx-focus-traversable: false;
+}
+
+.text-field:focused {
+  -fx-border-color: -cn-focused-border;
+  -fx-background-color: -cn-control-hovered-bg-color;
+}
+
+.button {
+  -fx-background-color: -cn-control-bg-color;
+  -fx-text-fill: -cn-text-color1;
+  -fx-background-radius: 7;
+  -fx-border-insets: 0 0 -1 0;
+  -fx-border-radius: 5;
+  -fx-border-color: -cn-control-border-color;
+  -fx-padding: 8 16;
+  -fx-focus-traversable: false;
+}
+
+.button:hover {
+  -fx-background-color: -cn-control-hovered-bg-color;
+}
+
+.button:focused {
+  -fx-border-color: -cn-focused-border;
+  -fx-background-color: -cn-control-hovered-bg-color;
+}
+
+.button:pressed {
+  -fx-background-color: -cn-control-pressed-bg-color;
+  -fx-effect: none;
+}
+
+.check-box {
+  -fx-text-fill: -cn-text-color1;
+  -fx-font-size: 14;
+  -fx-focus-traversable: false;
+}
+
+.check-box .box {
+  -fx-border-color: -cn-control-border-color;
+  -fx-border-radius: 3;
+  -fx-border-width: 1;
+  -fx-background-color: -cn-control-bg-color;
+  -fx-padding: 2;
+}
+
+.check-box:selected .box {
+  -fx-background-color: -cn-focused-border;
+  -fx-border-color: -cn-focused-border;
+}
+
+.check-box:hover .box {
+  -fx-border-color: -cn-gray2;
+}
+
+.check-box:focused .box {
+  -fx-border-color: -cn-focused-border;
+}
+
+.slider {
+  -fx-background-color: transparent;
+  -fx-focus-traversable: false;
+}
+
+.slider .track {
+  -fx-background-color: -cn-gray1;
+  -fx-background-radius: 3;
+  -fx-padding: 2;
+}
+
+.slider .thumb {
+  -fx-background-color: -cn-focused-border;
+  -fx-background-radius: 10;
+}
+
+.slider:hover .thumb {
+  -fx-background-color: -cn-hovered-border;
+}
+
+.slider .tick {
+  -fx-background-color: -cn-gray2;
+  -fx-font-size: 10;
+  -fx-text-fill: -cn-text-color1;
+}
+
+.scroll-bar {
+  -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+  -fx-background-color: -cn-control-border-color;
+  -fx-background-radius: 5;
+}
+
+.scroll-bar .thumb:hover {
+  -fx-background-color: -cn-hovered-border;
+}
+
+.scroll-bar .track {
+  -fx-background-color: -cn-control-bg-color;
+  -fx-border-color: -cn-control-border-color;
+  -fx-border-width: 1;
+}
+
+.button-width-100 {
+  -fx-min-width: 100;
+}
+
+.text {
+  -fx-text-fill: -cn-text-color1;
+}
+
+.title {
+  -fx-font-size: 14;
+}
+
+.sounds-pane {
+  -fx-padding: 15;
+  -fx-hgap: 15;
+  -fx-vgap: 15;
+  -fx-background-color: -cn-pane-color1;
+}
+
+.sounds-scrollpane {
+  -fx-background-color: -cn-pane-color1;
+}
+
+.sounds-scrollpane:focused {
+  -fx-background-color: -cn-pane-color1;
+  -fx-background-insets: -1 -1 -1 0;
+  -fx-padding: 1;
+}
+
+.sound-node {
+  -fx-pref-width: 160;
+  -fx-max-width: 160;
+  -fx-pref-height: 160;
+  -fx-max-height: 160;
+  -fx-padding: 10;
+  -fx-spacing: 5;
+  -fx-alignment: center;
+  -fx-border-color: transparent;
+  -fx-border-width: 1;
+  -fx-background-color: -cn-sound-bg-color;
+  -fx-background-radius: 10;
+  -fx-border-radius: 10;
+}
+
+.sound-node:hover {
+  -fx-background-color: -cn-sound-hovered-bg-color;
+  -fx-scale-x: 1.025;
+  -fx-scale-y: 1.025;
+}
+
+.sound-node:hover .selected {
+  -fx-background-color: -cn-sound-selected-bg-color;
+}
+
+.sound-node_icon-view {
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 8, 0, 0, 0);
+}
+
+.sound-node_title {
+  -fx-max-width: 160;
+  -fx-text-alignment: center;
+  -fx-alignment: center;
+}
+
+.selected-sound {
+  -fx-padding: 10;
+  -fx-border-insets: 0 0 0 0;
+  -fx-background-color: -cn-sound-selected-bg-color;
+  -fx-border-color: -cn-sound-selected-border-color;
+  -fx-scale-x: 1.025;
+  -fx-scale-y: 1.025;
+}
+
+.sound-control {
+  -fx-min-width: 256;
+  -fx-max-width: 256;
+  -fx-spacing: 15;
+  -fx-alignment: top-center;
+  -fx-padding: 20 10 20 10;
+  -fx-background-color: -cn-pane-color2;
+  -fx-border-style: solid;
+  -fx-border-width: 0 1 0 0;
+  -fx-border-color: -cn-border-color;
+}
+
+.sound-control_title {
+  -fx-font-size: 20;
+  -fx-padding: 0 0 10 0;
+}
+
+.sound-control_icon-view {
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 16, 0, 0, 0);
+}
+
+.sound-control_playback-control {
+  -fx-spacing: 10;
+}
+
+.sound-control_delete-button {
+  -fx-font-size: 14;
+  -fx-text-fill: -cn-text-color2;
+  -fx-background-color: -cn-delete-bg-color;
+  -fx-border-color: -cn-delete-border-color;
+}
+
+.sound-control_delete-button:hover {
+  -fx-background-color: -cn-delete-hovered-bg-color;
+}
+
+.sound-control_delete-button:pressed {
+  -fx-background-color: -cn-delete-pressed-bg-color;
+}
+
+.sound-control_delete-control {
+  -fx-alignment: bottom-center;
+}
+
+.control_label-pane {
+  -fx-alignment: center-left;
+}
+
+.slider-control_slider {
+  -fx-pref-width: 160;
+}
+
+.slider-control_slider-pane {
+  -fx-alignment: center;
+}
+
+.slider-control_text-field {
+  -fx-pref-width: 64;
+}
+
+.slider-control_symbol-pane {
+  -fx-min-width: 16;
+  -fx-alignment: center-left;
+}
+
+.slider-control_hbox {
+  -fx-spacing: 5;
+  -fx-alignment: center-left;
+}
+
+.file-control_file-pane {
+  -fx-spacing: 5;
+  -fx-alignment: center-left;
+}
+
+.keybind-control_keybind-pane {
+  -fx-spacing: 5;
+  -fx-alignment: center-left;
+}
+
+.board-control-pane {
+  -fx-alignment: center-left;
+  -fx-background-color: -cn-pane-color2;
+  -fx-border-style: solid;
+  -fx-border-width: 1 0 0 0;
+  -fx-border-color: -cn-border-color;
+  -fx-spacing: 15;
+  -fx-padding: 10;
+}
+
+.board-control {
+  -fx-alignment: center-left;
+  -fx-padding: 10;
+}
+
+.board-top {
+  -fx-background-color: -cn-pane-color2;
+  -fx-border-style: solid;
+  -fx-border-width: 0 0 1 0;
+  -fx-border-color: -cn-border-color;
+  -fx-padding: 10;
+}
+
+.board-top_new-button {
+  -fx-font-size: 14;
+  -fx-text-fill: -cn-text-color2;
+  -fx-background-color: -cn-new-bg-color;
+  -fx-border-color: -cn-new-border-color;
+}
+
+.board-top_new-button:hover {
+  -fx-background-color: -cn-new-hovered-bg-color;
+}
+
+.board-top_new-button:pressed {
+  -fx-background-color: -cn-new-pressed-bg-color;
+}
+
+.vertical-divider {
+  -fx-max-width: 1;
+  -fx-border-style: solid;
+  -fx-border-width: 0 1 0 0;
+  -fx-border-color: -cn-border-color;
+}
+
+.horizontal-divider {
+  -fx-max-height: 1;
+  -fx-border-style: solid;
+  -fx-border-width: 1 0 0 0;
+  -fx-border-color: -cn-border-color;
+}
+
+.root {
+  -fx-background-color: transparent;
+}
+
+.title-bar {
+  -fx-background-color: -cn-pane-color3;
+  -fx-border-style: solid;
+  -fx-border-width: 0 0 1 0;
+  -fx-border-color: -cn-border-color;
+}
+
+.title-bar_text {
+  -fx-text-fill: -cn-text-color1;
+  -fx-font-size: 18;
+}
+
+.title-bar_left {
+  -fx-alignment: center-left;
+  -fx-padding: 10;
+  -fx-spacing: 10;
+}
+
+.title-bar_button {
+  -fx-pref-width: 50;
+  -fx-focus-traversable: false;
+  -fx-font-size: 18;
+  -fx-padding: 0;
+  -fx-border-radius: 0;
+  -fx-background-radius: 0;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+
+}
+
+.title-bar_button:hover {
+
+}
+
+.title-bar_close-button:hover {
+  -fx-background-color: red;
+}
+
+.title-bar_right {
+
+}

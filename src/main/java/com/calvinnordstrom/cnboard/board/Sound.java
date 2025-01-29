@@ -1,5 +1,6 @@
 package com.calvinnordstrom.cnboard.board;
 
+import com.calvinnordstrom.cnboard.util.Resources;
 import javafx.beans.property.*;
 
 import java.io.File;
@@ -107,10 +108,10 @@ public class Sound {
 
     public static class Builder {
         private String title = "New Sound";
-        private File iconFile;
+        private File iconFile = Resources.DEFAULT_ICON_FILE;
         private File soundFile;
         private int keyCode;
-        private double volume = 50.0d;
+        private double volume = 100.0d;
         private boolean enabled = true;
 
         public Builder title(String title) {

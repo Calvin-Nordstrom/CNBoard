@@ -3,18 +3,15 @@ package com.calvinnordstrom.cnboard.board;
 import com.calvinnordstrom.cnboard.util.Resources;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jnativehook.GlobalScreen;
 
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
-import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class BoardManager {
+public class BoardModel {
     private final ObservableList<Sound> sounds = FXCollections.observableArrayList();
+    private final InputHandler inputHandler;
 
-    public BoardManager() {
+    public BoardModel() {
         TargetDataLine inputLine = AudioUtils.getDefaultTarget();
         SourceDataLine outputLine = AudioUtils.getSourceByName("CABLE Input (VB-Audio Virtual Cable)");
 //        SourceDataLine playbackLine = AudioUtils.getDefaultSource();
@@ -22,29 +19,21 @@ public class BoardManager {
         AudioRouter router = new AudioRouter(inputLine, outputLine);
         router.start();
 
-        Logger.getLogger(GlobalScreen.class.getPackageName()).setLevel(Level.OFF);
-        GlobalScreen.addNativeKeyListener(new KeyListener(sounds, router));
+        inputHandler = new InputHandler(sounds, router);
 
-        File iconFile = new File("src/main/resources/com/calvinnordstrom/cnboard/board/icons/bruh.png");
-        File soundFile = new File("src/main/resources/com/calvinnordstrom/cnboard/board/sounds/bruh.wav");
-        for (int i = 0; i < 7; i++) {
+        sounds.add(Resources.createBruhSound());
+        sounds.add(Resources.createTacoBellSound());
+
+        for (int i = 2; i < 7; i++) {
             sounds.add(new Sound.Builder()
                     .title("Bruh " + i)
                     .iconFile(Resources.DEFAULT_ICON_FILE)
-                    .soundFile(soundFile)
+                    .soundFile(Resources.BRUH_SOUND_FILE)
                     .keyCode(i + 2)
                     .volume(50)
                     .enabled(true)
                     .build());
         }
-        sounds.add(new Sound.Builder()
-                .title("Bruh")
-                .iconFile(Resources.DEFAULT_ICON_FILE)
-                .soundFile(soundFile)
-                .keyCode(50)
-                .volume(50)
-                .enabled(true)
-                .build());
     }
 
     public void addSound(Sound sound) {
@@ -57,5 +46,13 @@ public class BoardManager {
 
     public ObservableList<Sound> getSounds() {
         return sounds;
+    }
+
+    public void keyPress(int keyCode) {
+        inputHandler.onKeyPressed(keyCode);
+    }
+
+    public void keyRelease(int keyCode) {
+        inputHandler.onKeyReleased(keyCode);
     }
 }

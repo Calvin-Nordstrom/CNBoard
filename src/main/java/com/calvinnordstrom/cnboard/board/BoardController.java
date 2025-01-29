@@ -1,24 +1,25 @@
 package com.calvinnordstrom.cnboard.board;
 
-import com.calvinnordstrom.cnboard.board.view.BoardView;
-import javafx.scene.Parent;
-
 public class BoardController {
-    private final BoardManager manager;
-    private final BoardView view;
+    private final BoardModel model;
 
-    public BoardController(BoardManager manager, BoardView view) {
-        this.manager = manager;
-        this.view = view;
-
-        init();
+    public BoardController(BoardModel model) {
+        this.model = model;
     }
 
-    private void init() {
-
+    public void onAddSound(Sound sound) {
+        model.addSound(sound);
     }
 
-    public Parent getView() {
-        return view;
+    public void onRemoveSound(Sound sound) {
+        model.removeSound(sound);
+    }
+
+    public void onKeyPressed(int keyCode) {
+        model.keyPress(keyCode);
+    }
+
+    public void onKeyReleased(int keyCode) {
+        model.keyRelease(keyCode);
     }
 }

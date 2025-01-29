@@ -1,9 +1,11 @@
 package com.calvinnordstrom.cnboard;
 
 import com.calvinnordstrom.cnboard.board.BoardController;
-import com.calvinnordstrom.cnboard.board.BoardManager;
-import com.calvinnordstrom.cnboard.board.view.BoardView;
+import com.calvinnordstrom.cnboard.board.BoardModel;
+import com.calvinnordstrom.cnboard.board.BoardView;
+import com.calvinnordstrom.cnboard.board.KeyListener;
 import javafx.application.Application;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -28,38 +30,40 @@ public class Main extends Application {
             LOGGER.severe(e.getMessage());
         }
 
-        BoardManager model = new BoardManager();
-        BoardView view = new BoardView(model.getSounds());
-        BoardController controller = new BoardController(model, view);
+        BoardModel model = new BoardModel();
+        BoardController controller = new BoardController(model);
+        BoardView view = new BoardView(model, controller);
+
+        Logger.getLogger(GlobalScreen.class.getPackageName()).setLevel(Level.OFF);
+        GlobalScreen.addNativeKeyListener(new KeyListener(controller));
 
 //        TitleBar titleBar = new TitleBar(stage, Resources.DEFAULT_ICON);
 //        VBox content = new VBox(titleBar, view);
 //
-//        StackPane shadowWrapper = new StackPane(content);
-//        shadowWrapper.setStyle("-fx-background-color: transparent;");
-//        shadowWrapper.setPadding(new Insets(0, 20, 20, 0));
-//
+//        StackPane root = new StackPane(content);
 //        DropShadow dropShadow = new DropShadow();
-//        dropShadow.setColor(Color.rgb(0, 0, 0, 0.25));
-//        dropShadow.setRadius(12);
+//        dropShadow.setColor(Color.rgb(0, 0, 0, 0.15));
+//        dropShadow.setRadius(10);
 //        dropShadow.setOffsetX(4);
 //        dropShadow.setOffsetY(4);
-//        shadowWrapper.setEffect(dropShadow);
-//
-//        Scene scene = new Scene(shadowWrapper);
-        Scene scene = new Scene(view);
+//        root.setEffect(dropShadow);
+//        root.setPadding(new Insets(0, 20, 20, 0));
+
+        Parent root = view.asParent();
+        Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
-        scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("css/styles.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("static/css/styles.css")).toExternalForm());
 
 //        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
-//        stage.getIcons().add(new Image(Resources.DEFAULT_ICON.getAbsolutePath()));
         stage.setTitle(TITLE + " " + VERSION);
         stage.setMinWidth(960);
         stage.setMinHeight(540);
         stage.show();
 
-        view.prefHeightProperty().bind(stage.heightProperty());
+//        ((Region) root).prefHeightProperty().bind(stage.heightProperty());
+
+//        root.getStyleClass().add("root");
     }
 
     @Override
@@ -70,7 +74,9 @@ public class Main extends Application {
             LOGGER.severe(e.getMessage());
         }
 
-        System.out.println("TESTING");
+        System.out.println("STOPPING...");
+
+        System.exit(0);
     }
 
     public static void main(String[] args) {
