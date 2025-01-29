@@ -2,6 +2,7 @@ package com.calvinnordstrom.cnboard.view;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -12,9 +13,10 @@ import javafx.stage.Window;
 
 import java.io.File;
 
-public class FileControl extends VBox {
+public class FileControl {
     private final ObjectProperty<File> value;
     private final FileChooser.ExtensionFilter filter;
+    private final VBox view = new VBox();
     private final Label label;
     private final Button fileButton = new Button("Choose file");
     private final Label fileName;
@@ -37,7 +39,7 @@ public class FileControl extends VBox {
         HBox labelPane = new HBox(label);
         fileName.setTooltip(new Tooltip(value.getValue().getName()));
         HBox filePane = new HBox(fileButton, fileName);
-        getChildren().addAll(labelPane, filePane);
+        view.getChildren().addAll(labelPane, filePane);
 
         label.getStyleClass().addAll("text", "title");
         labelPane.getStyleClass().add("control_label-pane");
@@ -51,7 +53,7 @@ public class FileControl extends VBox {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open");
             fileChooser.getExtensionFilters().add(filter);
-            Window owner = getScene().getWindow();
+            Window owner = view.getScene().getWindow();
             File selectedFile = fileChooser.showOpenDialog(owner);
 
             if (selectedFile != null) {
@@ -61,5 +63,9 @@ public class FileControl extends VBox {
                 fileName.setTooltip(new Tooltip(selectedFileName));
             }
         });
+    }
+
+    public Node asNode() {
+        return view;
     }
 }

@@ -5,6 +5,7 @@ import com.calvinnordstrom.cnboard.board.BoardModel;
 import com.calvinnordstrom.cnboard.board.BoardView;
 import com.calvinnordstrom.cnboard.board.KeyListener;
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -23,8 +24,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        Logger.getLogger(GlobalScreen.class.getPackageName()).setLevel(Level.OFF);
         try {
-            Logger.getLogger(GlobalScreen.class.getPackageName()).setLevel(Level.OFF);
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException e) {
             LOGGER.severe(e.getMessage());
@@ -34,7 +35,6 @@ public class Main extends Application {
         BoardController controller = new BoardController(model);
         BoardView view = new BoardView(model, controller);
 
-        Logger.getLogger(GlobalScreen.class.getPackageName()).setLevel(Level.OFF);
         GlobalScreen.addNativeKeyListener(new KeyListener(controller));
 
 //        TitleBar titleBar = new TitleBar(stage, Resources.DEFAULT_ICON);
@@ -49,8 +49,8 @@ public class Main extends Application {
 //        root.setEffect(dropShadow);
 //        root.setPadding(new Insets(0, 20, 20, 0));
 
-        Parent root = view.asParent();
-        Scene scene = new Scene(root);
+        Node root = view.asNode();
+        Scene scene = new Scene((Parent) root);
         scene.setFill(Color.TRANSPARENT);
         scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("static/css/styles.css")).toExternalForm());
 

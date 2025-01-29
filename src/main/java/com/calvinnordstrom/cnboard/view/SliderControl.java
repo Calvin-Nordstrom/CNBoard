@@ -2,14 +2,16 @@ package com.calvinnordstrom.cnboard.view;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class SliderControl extends VBox {
+public class SliderControl {
     private final DoubleProperty value;
+    private final VBox view = new VBox();
     private final Label label;
     private final Slider slider;
     private final TextField textField;
@@ -34,7 +36,7 @@ public class SliderControl extends VBox {
         HBox sliderPane = new HBox(slider);
         HBox symbolPane = new HBox(symbolLabel);
         HBox hbox = new HBox(sliderPane, textField, symbolPane);
-        getChildren().addAll(labelPane, hbox);
+        view.getChildren().addAll(labelPane, hbox);
 
         label.getStyleClass().addAll("text", "title");
         labelPane.getStyleClass().add("control_label-pane");
@@ -67,5 +69,9 @@ public class SliderControl extends VBox {
 
     private String format(double value) {
         return String.format("%.2f", value);
+    }
+
+    public Node asNode() {
+        return view;
     }
 }

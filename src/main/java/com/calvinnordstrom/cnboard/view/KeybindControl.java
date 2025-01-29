@@ -3,6 +3,7 @@ package com.calvinnordstrom.cnboard.view;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -10,10 +11,11 @@ import javafx.scene.layout.VBox;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-public class KeybindControl extends VBox implements NativeKeyListener {
+public class KeybindControl implements NativeKeyListener {
     private static final String DEFAULT_TEXT = "Set keybind";
     private static final String WAITING_TEXT = "Type a key...";
     private final IntegerProperty value;
+    private final VBox view = new VBox();
     private final Label label;
     private final Button keybindButton = new Button(DEFAULT_TEXT);
     private final Label keyCodeLabel;
@@ -34,7 +36,7 @@ public class KeybindControl extends VBox implements NativeKeyListener {
     private void init() {
         HBox labelPane = new HBox(label);
         HBox keybindPane = new HBox(keybindButton, keyCodeLabel);
-        getChildren().addAll(labelPane, keybindPane);
+        view.getChildren().addAll(labelPane, keybindPane);
 
         label.getStyleClass().addAll("text", "title");
         labelPane.getStyleClass().add("control_label-pane");
@@ -74,4 +76,8 @@ public class KeybindControl extends VBox implements NativeKeyListener {
 
     @Override
     public void nativeKeyReleased(NativeKeyEvent event) {}
+
+    public Node asNode() {
+        return view;
+    }
 }

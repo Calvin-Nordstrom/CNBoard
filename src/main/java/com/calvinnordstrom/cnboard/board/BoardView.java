@@ -6,12 +6,16 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -86,9 +90,9 @@ public class BoardView {
         ToggleControl hearSoundsControl = new ToggleControl("Hear sounds", new SimpleBooleanProperty());
         KeybindControl stopSoundsControl = new KeybindControl("Stop all sounds", new SimpleIntegerProperty());
 
-        VBox pane1 = new VBox(hearMyselfControl);
-        VBox pane2 = new VBox(hearSoundsControl);
-        VBox pane3 = new VBox(stopSoundsControl);
+        VBox pane1 = new VBox(hearMyselfControl.asNode());
+        VBox pane2 = new VBox(hearSoundsControl.asNode());
+        VBox pane3 = new VBox(stopSoundsControl.asNode());
         HBox boardControlPane = new HBox(pane1, createVerticalDivider(), pane2, createVerticalDivider(), pane3, createVerticalDivider());
         view.setBottom(boardControlPane);
 
@@ -126,7 +130,7 @@ public class BoardView {
         soundNode.asParent().getStyleClass().add("selected-sound");
     }
 
-    public Parent asParent() {
+    public Node asNode() {
         return view;
     }
 
@@ -232,7 +236,7 @@ public class BoardView {
             });
             HBox deleteControl = new HBox(deleteButton);
 
-            view.getChildren().addAll(title, iconView, titleControl, keybindControl, enabledControl, soundFileControl, iconFileControl, createHorizontalDivider(), volumeControl, playbackControl, createHorizontalDivider(), deleteControl);
+            view.getChildren().addAll(title, iconView, titleControl.asNode(), keybindControl.asNode(), enabledControl.asNode(), soundFileControl.asNode(), iconFileControl.asNode(), createHorizontalDivider(), volumeControl.asNode(), playbackControl, createHorizontalDivider(), deleteControl);
 
             view.getStyleClass().add("sound-control");
             title.getStyleClass().addAll("text", "sound-control_title");
