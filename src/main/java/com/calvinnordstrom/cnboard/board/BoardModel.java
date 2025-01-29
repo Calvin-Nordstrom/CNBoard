@@ -21,8 +21,8 @@ public class BoardModel {
 
         inputHandler = new InputHandler(sounds, router);
 
-        sounds.add(Resources.createBruhSound());
-        sounds.add(Resources.createTacoBellSound());
+        sounds.add(Sounds.createBruhSound());
+        sounds.add(Sounds.createTacoBellSound());
 
         for (int i = 2; i < 7; i++) {
             sounds.add(new Sound.Builder()
