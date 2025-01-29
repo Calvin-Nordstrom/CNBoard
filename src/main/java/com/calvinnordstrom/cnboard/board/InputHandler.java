@@ -32,7 +32,8 @@ public class InputHandler {
                     if (sound.isEnabled()) {
                         File soundFile = sound.getSoundFile();
                         if (soundFile.exists()) {
-                            router.injectAudio(soundFile);
+                            float volume = (float) sound.getVolume() / 100;
+                            router.injectAudio(soundFile, volume);
                             lastPressedTime = System.currentTimeMillis();
                         }
                     }

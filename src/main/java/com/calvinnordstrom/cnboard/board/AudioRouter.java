@@ -63,7 +63,7 @@ public class AudioRouter {
         }
     }
 
-    public synchronized void injectAudio(File file) {
+    public synchronized void injectAudio(File file, float volume) {
         stopInjection();
 
         injectionThread = new Thread(() -> {
@@ -81,6 +81,7 @@ public class AudioRouter {
                 int bytesRead;
                 while (isPlaying && (bytesRead = ais.read(buffer)) != -1) {
                     if (Thread.currentThread().isInterrupted()) break;
+                    scaleVolume(buffer, bytesRead, format, volume);
                     outputLine.write(buffer, 0, bytesRead);
                 }
                 ais.close();
@@ -94,6 +95,41 @@ public class AudioRouter {
         });
 
         injectionThread.start();
+    }
+
+    private static void scaleVolume(byte[] buffer, int bytesRead, AudioFormat format, float scale) {
+        if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) return;
+
+        int sampleSizeInBytes = format.getSampleSizeInBits() / 8;
+        boolean isBigEndian = format.isBigEndian();
+
+        for (int i = 0; i < bytesRead; i += sampleSizeInBytes) {
+            int sample = 0;
+
+            if (sampleSizeInBytes == 2) {
+                if (isBigEndian) {
+                    sample = (buffer[i] << 8) | (buffer[i + 1] & 0xFF);
+                } else {
+                    sample = (buffer[i + 1] << 8) | (buffer[i] & 0xFF);
+                }
+            } else if (sampleSizeInBytes == 1) {
+                sample = buffer[i] - 128;
+            }
+
+            sample = (int) (sample * scale);
+
+            if (sampleSizeInBytes == 2) {
+                if (isBigEndian) {
+                    buffer[i] = (byte) ((sample >> 8) & 0xFF);
+                    buffer[i + 1] = (byte) (sample & 0xFF);
+                } else {
+                    buffer[i] = (byte) (sample & 0xFF);
+                    buffer[i + 1] = (byte) ((sample >> 8) & 0xFF);
+                }
+            } else if (sampleSizeInBytes == 1) {
+                buffer[i] = (byte) (sample + 128);
+            }
+        }
     }
 
     public synchronized void stopInjection() {
