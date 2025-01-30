@@ -9,6 +9,8 @@ import javax.sound.sampled.TargetDataLine;
 
 public class BoardModel {
     private final ObservableList<Sound> sounds = FXCollections.observableArrayList();
+    private final Settings settings = new Settings();
+    private final AudioRouter router;
     private final InputHandler inputHandler;
 
     public BoardModel() {
@@ -16,10 +18,10 @@ public class BoardModel {
         SourceDataLine outputLine = AudioUtils.getSourceByName("CABLE Input (VB-Audio Virtual Cable)");
 //        SourceDataLine playbackLine = AudioUtils.getDefaultSource();
 //        SourceDataLine playbackLine = AudioUtils.getSourceByName("Speakers (Logitech PRO X Gaming Headset)");
-        AudioRouter router = new AudioRouter(inputLine, outputLine);
+        router = new AudioRouter(inputLine, outputLine);
         router.start();
 
-        inputHandler = new InputHandler(sounds, router);
+        inputHandler = new InputHandler(this);
 
         sounds.add(Sounds.createBruhSound());
         sounds.add(Sounds.createTacoBellSound());
@@ -36,6 +38,14 @@ public class BoardModel {
         }
     }
 
+    public void keyPress(int keyCode) {
+        inputHandler.onKeyPressed(keyCode);
+    }
+
+    public void keyRelease(int keyCode) {
+        inputHandler.onKeyReleased(keyCode);
+    }
+
     public void addSound(Sound sound) {
         sounds.add(sound);
     }
@@ -48,11 +58,11 @@ public class BoardModel {
         return sounds;
     }
 
-    public void keyPress(int keyCode) {
-        inputHandler.onKeyPressed(keyCode);
+    public Settings getSettings() {
+        return settings;
     }
 
-    public void keyRelease(int keyCode) {
-        inputHandler.onKeyReleased(keyCode);
+    public AudioRouter getRouter() {
+        return router;
     }
 }

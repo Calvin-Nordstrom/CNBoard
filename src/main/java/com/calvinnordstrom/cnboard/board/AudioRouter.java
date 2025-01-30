@@ -9,6 +9,7 @@ public class AudioRouter {
     private static final int OUTPUT_BUFFER_SIZE = 512;
     private final TargetDataLine inputLine;
     private final SourceDataLine outputLine;
+    private Clip clip;
     private volatile boolean running = false;
     private volatile boolean isPlaying = false;
     private Thread injectionThread;
@@ -36,14 +37,18 @@ public class AudioRouter {
     }
 
     public synchronized void stop() {
-        running = false;
+        if (!running) return;
 
+        running = false;
         stopInjection();
         if (inputLine.isOpen()) {
             inputLine.close();
         }
         if (outputLine.isOpen()) {
             outputLine.close();
+        }
+        if (clip != null && clip.isOpen()) {
+            clip.close();
         }
     }
 
@@ -63,28 +68,46 @@ public class AudioRouter {
         }
     }
 
-    public synchronized void injectAudio(File file, float volume) {
+    public synchronized void injectAudio(File file, float volume, boolean playback) {
         stopInjection();
 
         injectionThread = new Thread(() -> {
             try {
                 AudioInputStream ais = AudioSystem.getAudioInputStream(file);
+                AudioInputStream aisCopy = AudioSystem.getAudioInputStream(file);
                 AudioFormat format = ais.getFormat();
                 AudioFormat outputFormat = outputLine.getFormat();
 
                 if (!format.matches(outputFormat)) {
                     ais = AudioSystem.getAudioInputStream(outputFormat, ais);
+                    aisCopy = AudioSystem.getAudioInputStream(outputFormat, aisCopy);
+                }
+
+                if (playback) {
+                    try {
+                        clip = AudioSystem.getClip();
+                        clip.open(ais);
+                        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                        float value = clamp(volume, -20, gainControl.getMaximum());
+                        gainControl.setValue(value);
+
+                        clip.start();
+                    } catch (LineUnavailableException e) {
+                        System.err.println(e.getMessage());
+                    }
                 }
 
                 isPlaying = true;
                 byte[] buffer = new byte[OUTPUT_BUFFER_SIZE];
                 int bytesRead;
-                while (isPlaying && (bytesRead = ais.read(buffer)) != -1) {
+                while (isPlaying && (bytesRead = aisCopy.read(buffer)) != -1) {
                     if (Thread.currentThread().isInterrupted()) break;
                     scaleVolume(buffer, bytesRead, format, volume);
                     outputLine.write(buffer, 0, bytesRead);
                 }
+
                 ais.close();
+                aisCopy.close();
             } catch (UnsupportedAudioFileException | IOException e) {
                 System.err.println(e.getMessage());
             } finally {
@@ -93,8 +116,17 @@ public class AudioRouter {
                 isPlaying = false;
             }
         });
-
         injectionThread.start();
+    }
+
+    public synchronized void stopInjection() {
+        isPlaying = false;
+        if (injectionThread != null && injectionThread.isAlive()) {
+            injectionThread.interrupt();
+        }
+        if (clip != null && clip.isOpen()) {
+            clip.stop();
+        }
     }
 
     private static void scaleVolume(byte[] buffer, int bytesRead, AudioFormat format, float scale) {
@@ -132,10 +164,7 @@ public class AudioRouter {
         }
     }
 
-    public synchronized void stopInjection() {
-        isPlaying = false;
-        if (injectionThread != null && injectionThread.isAlive()) {
-            injectionThread.interrupt();
-        }
+    private static float clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(max, min + value * (max - min)));
     }
 }

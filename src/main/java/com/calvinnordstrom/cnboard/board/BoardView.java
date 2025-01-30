@@ -2,8 +2,6 @@ package com.calvinnordstrom.cnboard.board;
 
 import com.calvinnordstrom.cnboard.util.LocalAudioPlayer;
 import com.calvinnordstrom.cnboard.view.*;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -19,9 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.calvinnordstrom.cnboard.util.Utils.*;
 
@@ -86,19 +81,18 @@ public class BoardView {
     }
 
     private void initBottom() {
-        ToggleControl hearMyselfControl = new ToggleControl("Hear myself", new SimpleBooleanProperty());
-        ToggleControl hearSoundsControl = new ToggleControl("Hear sounds", new SimpleBooleanProperty());
-        KeybindControl stopSoundsControl = new KeybindControl("Stop all sounds", new SimpleIntegerProperty());
+        Settings settings = model.getSettings();
+        ToggleControl hearSoundsControl = new ToggleControl("Hear sounds", settings.hearSoundsProperty());
+        KeybindControl stopSoundsControl = new KeybindControl("Stop all sounds", settings.stopSoundsKeyCodeProperty());
+        GlobalScreen.addNativeKeyListener(stopSoundsControl);
 
-        VBox pane1 = new VBox(hearMyselfControl.asNode());
-        VBox pane2 = new VBox(hearSoundsControl.asNode());
-        VBox pane3 = new VBox(stopSoundsControl.asNode());
-        HBox boardControlPane = new HBox(pane1, createVerticalDivider(), pane2, createVerticalDivider(), pane3, createVerticalDivider());
+        VBox pane1 = new VBox(hearSoundsControl.asNode());
+        VBox pane2 = new VBox(stopSoundsControl.asNode());
+        HBox boardControlPane = new HBox(pane1, createVerticalDivider(), pane2);
         view.setBottom(boardControlPane);
 
         pane1.getStyleClass().add("board-control");
         pane2.getStyleClass().add("board-control");
-        pane3.getStyleClass().add("board-control");
         boardControlPane.getStyleClass().add("board-control-pane");
     }
 
@@ -207,7 +201,6 @@ public class BoardView {
             StringControl titleControl = new StringControl("Title", sound.titleProperty());
 
             KeybindControl keybindControl = new KeybindControl("Keybind", sound.keyCodeProperty());
-            Logger.getLogger(GlobalScreen.class.getPackageName()).setLevel(Level.OFF);
             GlobalScreen.addNativeKeyListener(keybindControl);
 
             ToggleControl enabledControl = new ToggleControl("Enabled", sound.enabledProperty());
@@ -220,12 +213,12 @@ public class BoardView {
 
             SliderControl volumeControl = new SliderControl("Volume", 0, 100, sound.volumeProperty(), "%");
 
-            LocalAudioPlayer player = LocalAudioPlayer.getInstance();
-            Button startButton = new Button("Start");
-            startButton.setOnMouseClicked(_ -> player.start(sound.getSoundFile()));
-            Button stopButton = new Button("Stop");
-            stopButton.setOnMouseClicked(_ -> player.stop());
-            HBox playbackControl = new HBox(startButton, stopButton);
+//            LocalAudioPlayer player = LocalAudioPlayer.getInstance();
+//            Button startButton = new Button("Start");
+//            startButton.setOnMouseClicked(_ -> player.start(sound.getSoundFile()));
+//            Button stopButton = new Button("Stop");
+//            stopButton.setOnMouseClicked(_ -> player.stop());
+//            HBox playbackControl = new HBox(startButton, stopButton);
 
             Button deleteButton = new Button("Delete");
             deleteButton.setOnMouseClicked(_ -> {
@@ -236,12 +229,13 @@ public class BoardView {
             });
             HBox deleteControl = new HBox(deleteButton);
 
-            view.getChildren().addAll(title, iconView, titleControl.asNode(), keybindControl.asNode(), enabledControl.asNode(), soundFileControl.asNode(), iconFileControl.asNode(), createHorizontalDivider(), volumeControl.asNode(), playbackControl, createHorizontalDivider(), deleteControl);
+//            view.getChildren().addAll(title, iconView, titleControl.asNode(), keybindControl.asNode(), enabledControl.asNode(), soundFileControl.asNode(), iconFileControl.asNode(), createHorizontalDivider(), volumeControl.asNode(), playbackControl, createHorizontalDivider(), deleteControl);
+            view.getChildren().addAll(title, iconView, titleControl.asNode(), keybindControl.asNode(), enabledControl.asNode(), soundFileControl.asNode(), iconFileControl.asNode(), volumeControl.asNode(), createHorizontalDivider(), deleteControl);
 
             view.getStyleClass().add("sound-control");
             title.getStyleClass().addAll("text", "sound-control_title");
             iconView.getStyleClass().add("sound-control_icon-view");
-            playbackControl.getStyleClass().add("sound-control_playback-control");
+//            playbackControl.getStyleClass().add("sound-control_playback-control");
             deleteButton.getStyleClass().add("sound-control_delete-button");
             deleteControl.getStyleClass().add("sound-control_delete-control");
         }
