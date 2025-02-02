@@ -47,9 +47,6 @@ public class AudioRouter {
         if (outputLine.isOpen()) {
             outputLine.close();
         }
-        if (clip != null && clip.isOpen()) {
-            clip.close();
-        }
     }
 
     private void routeInput() {
@@ -90,7 +87,6 @@ public class AudioRouter {
                         FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
                         float value = clamp(volume, -20, gainControl.getMaximum());
                         gainControl.setValue(value);
-
                         clip.start();
                     } catch (LineUnavailableException e) {
                         System.err.println(e.getMessage());
@@ -121,12 +117,16 @@ public class AudioRouter {
 
     public synchronized void stopInjection() {
         isPlaying = false;
+
         if (injectionThread != null && injectionThread.isAlive()) {
             injectionThread.interrupt();
         }
+
         if (clip != null && clip.isOpen()) {
             clip.stop();
         }
+
+        outputLine.flush();
     }
 
     private static void scaleVolume(byte[] buffer, int bytesRead, AudioFormat format, float scale) {
