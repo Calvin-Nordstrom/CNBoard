@@ -19,7 +19,8 @@
   
   -cn-control-bg-color: #282828;
   -cn-control-border-color: #444444;
-  -cn-control-hovered-bg-color: #313131;
+  -cn-control-hovered-bg-color1: #313131;
+  -cn-control-hovered-bg-color2: #585858;
   -cn-control-pressed-bg-color: #1f1f1f;
 
   -cn-delete-bg-color: #c04040;
@@ -46,7 +47,7 @@
 
 .text-field:focused {
   -fx-border-color: -cn-focused-border;
-  -fx-background-color: -cn-control-hovered-bg-color;
+  -fx-background-color: -cn-control-hovered-bg-color1;
 }
 
 .button {
@@ -61,12 +62,12 @@
 }
 
 .button:hover {
-  -fx-background-color: -cn-control-hovered-bg-color;
+  -fx-background-color: -cn-control-hovered-bg-color1;
 }
 
 .button:focused {
   -fx-border-color: -cn-focused-border;
-  -fx-background-color: -cn-control-hovered-bg-color;
+  -fx-background-color: -cn-control-hovered-bg-color1;
 }
 
 .button:pressed {
@@ -132,7 +133,7 @@
 }
 
 .scroll-bar .thumb {
-  -fx-background-color: -cn-control-border-color;
+  -fx-background-color: -cn-control-hovered-bg-color2;
   -fx-background-radius: 5;
 }
 
@@ -165,14 +166,14 @@
   -fx-background-color: -cn-pane-color1;
 }
 
-.sounds-scrollpane {
+.sounds-pane_scroll-pane {
   -fx-background-color: -cn-pane-color1;
 }
 
-.sounds-scrollpane:focused {
+.sounds-pane_scroll-pane:focused {
   -fx-background-color: -cn-pane-color1;
-  -fx-background-insets: -1 -1 -1 0;
-  -fx-padding: 1;
+  -fx-background-insets: 0 -1 -1 0;
+  -fx-background-radius: 0 0 0 0;
 }
 
 .sound-node {
@@ -211,7 +212,6 @@
 }
 
 .selected-sound {
-  -fx-padding: 10;
   -fx-border-insets: 0 0 0 0;
   -fx-background-color: -cn-sound-selected-bg-color;
   -fx-border-color: -cn-sound-selected-border-color;
@@ -224,11 +224,22 @@
   -fx-max-width: 256;
   -fx-spacing: 15;
   -fx-alignment: top-center;
-  -fx-padding: 20 10 20 10;
+  -fx-padding: 20 4 20 10;
+  -fx-background-color: -cn-pane-color2;
+  -fx-background-insets: 0 -8 0 0;
+}
+
+.sound-control_scroll-pane {
   -fx-background-color: -cn-pane-color2;
   -fx-border-style: solid;
   -fx-border-width: 0 1 0 0;
   -fx-border-color: -cn-border-color;
+}
+
+.sound-control_scroll-pane:focused {
+  -fx-background-color: -cn-pane-color2;
+  -fx-background-insets: 0 -1 -1 0;
+  -fx-background-radius: 0 0 0 0;
 }
 
 .sound-control_title {

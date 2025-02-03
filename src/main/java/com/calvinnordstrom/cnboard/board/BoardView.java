@@ -5,15 +5,11 @@ import com.calvinnordstrom.cnboard.view.*;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -65,15 +61,12 @@ public class BoardView {
             renderSounds();
         });
 
-        ScrollPane scrollPane = new ScrollPane(soundsPane);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        ScrollPane scrollPane = createScrollPane(soundsPane);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         view.setCenter(scrollPane);
 
-        soundsPane.prefHeightProperty().bind(scrollPane.heightProperty().subtract(2));
-
         soundsPane.getStyleClass().add("sounds-pane");
-        scrollPane.getStyleClass().add("sounds-scrollpane");
+        scrollPane.getStyleClass().add("sounds-pane_scroll-pane");
     }
 
     private void initRight() {
@@ -105,23 +98,31 @@ public class BoardView {
             if (sounds.getFirst().equals(sound)) {
                 setSelectedSound(soundNode);
             }
-            soundNode.asParent().addEventFilter(MouseEvent.MOUSE_CLICKED, _ -> {
+            soundNode.asNode().addEventFilter(MouseEvent.MOUSE_CLICKED, _ -> {
                 setSelectedSound(soundNode);
             });
-            soundsPane.getChildren().add(soundNode.asParent());
+            soundsPane.getChildren().add(soundNode.asNode());
         }
     }
 
     private void setSelectedSound(SoundNode soundNode) {
+        if (soundNode.equals(selectedSound)) return;
+
         LocalAudioPlayer.getInstance().stop();
         SoundControl soundControl = new SoundControl(soundNode.getSound());
-        view.setLeft(soundControl.asParent());
+        Region content = (Region) soundControl.asNode();
+
+        ScrollPane scrollPane = createScrollPane(content);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        view.setLeft(scrollPane);
 
         if (selectedSound != null) {
-            selectedSound.asParent().getStyleClass().remove("selected-sound");
+            selectedSound.asNode().getStyleClass().remove("selected-sound");
         }
         selectedSound = soundNode;
-        soundNode.asParent().getStyleClass().add("selected-sound");
+        soundNode.asNode().getStyleClass().add("selected-sound");
+
+        scrollPane.getStyleClass().add("sound-control_scroll-pane");
     }
 
     public Node asNode() {
@@ -170,7 +171,7 @@ public class BoardView {
             return sound;
         }
 
-        public Parent asParent() {
+        public Node asNode() {
             return view;
         }
     }
@@ -244,8 +245,15 @@ public class BoardView {
             return sound;
         }
 
-        public Parent asParent() {
+        public Node asNode() {
             return view;
         }
+    }
+
+    private static ScrollPane createScrollPane(Node content) {
+        ScrollPane sp = new ScrollPane(content);
+        sp.setFitToWidth(true);
+        sp.setFitToHeight(true);
+        return sp;
     }
 }
