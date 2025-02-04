@@ -1,7 +1,6 @@
 package com.calvinnordstrom.cnboard.view;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -17,15 +16,12 @@ public class SliderControl {
     private final TextField textField;
     private final Label symbolLabel;
 
-    public SliderControl(String text, double min, double max, DoubleProperty boundValue, String symbol) {
-        double val = boundValue.get();
-        value = new SimpleDoubleProperty(val);
+    public SliderControl(String text, double min, double max, DoubleProperty value, String symbol) {
+        this.value = value;
         label = new Label(text);
-        slider = new Slider(min, max, val);
-        textField = new TextField(format(val));
+        slider = new Slider(min, max, value.get());
+        textField = new TextField(format(value.get()));
         symbolLabel = new Label(symbol);
-
-        boundValue.bindBidirectional(value);
 
         init();
         initEventHandlers();

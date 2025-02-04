@@ -2,7 +2,6 @@ package com.calvinnordstrom.cnboard.view;
 
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,13 +20,10 @@ public class KeybindControl implements NativeKeyListener {
     private final Label keyCodeLabel;
     private boolean waitingForKey = false;
 
-    public KeybindControl(String text, IntegerProperty boundValue) {
-        int val = boundValue.get();
-        value = new SimpleIntegerProperty(val);
+    public KeybindControl(String text, IntegerProperty value) {
+        this.value = value;
         label = new Label(text);
-        keyCodeLabel = new Label(NativeKeyEvent.getKeyText(val));
-
-        boundValue.bindBidirectional(value);
+        keyCodeLabel = new Label(NativeKeyEvent.getKeyText(value.get()));
 
         init();
         initEventHandlers();

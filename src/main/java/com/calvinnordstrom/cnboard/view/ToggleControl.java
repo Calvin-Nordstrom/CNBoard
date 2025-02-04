@@ -1,7 +1,6 @@
 package com.calvinnordstrom.cnboard.view;
 
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
@@ -11,13 +10,10 @@ public class ToggleControl {
     private final HBox view = new HBox();
     private final CheckBox checkBox;
 
-    public ToggleControl(String text, BooleanProperty boundValue) {
-        boolean val = boundValue.get();
-        value = new SimpleBooleanProperty(val);
+    public ToggleControl(String text, BooleanProperty value) {
+        this.value = value;
         checkBox = new CheckBox(text);
-        checkBox.setSelected(val);
-
-        boundValue.bindBidirectional(value);
+        checkBox.setSelected(value.get());
 
         init();
         initEventHandlers();
@@ -31,7 +27,7 @@ public class ToggleControl {
     }
 
     private void initEventHandlers() {
-        checkBox.selectedProperty().bindBidirectional(value);
+        checkBox.selectedProperty().addListener((_, _, newValue) -> value.set(newValue));
     }
 
     public Node asNode() {

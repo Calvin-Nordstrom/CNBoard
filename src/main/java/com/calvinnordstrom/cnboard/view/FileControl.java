@@ -1,7 +1,6 @@
 package com.calvinnordstrom.cnboard.view;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,15 +20,12 @@ public class FileControl {
     private final Button fileButton = new Button("Choose file");
     private final Label fileName;
 
-    public FileControl(String text, ObjectProperty<File> boundValue,
+    public FileControl(String text, ObjectProperty<File> value,
                        FileChooser.ExtensionFilter filter) {
-        File val = boundValue.get();
-        value = new SimpleObjectProperty<>(val);
+        this.value = value;
         this.filter = filter;
         label = new Label(text);
-        fileName = new Label(val.getName());
-
-        boundValue.bindBidirectional(value);
+        fileName = new Label(value.getName());
 
         init();
         initEventHandlers();
