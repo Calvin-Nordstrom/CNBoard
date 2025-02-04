@@ -1,5 +1,7 @@
 package com.calvinnordstrom.cnboard.board;
 
+import com.calvinnordstrom.cnboard.util.LocalAudioPlayer;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +11,7 @@ public class AudioRouter {
     private static final int OUTPUT_BUFFER_SIZE = 512;
     private final TargetDataLine inputLine;
     private final SourceDataLine outputLine;
-    private Clip clip;
+    private final LocalAudioPlayer localAudioPlayer = new LocalAudioPlayer();
     private volatile boolean running = false;
     private volatile boolean isPlaying = false;
     private Thread injectionThread;
@@ -66,6 +68,9 @@ public class AudioRouter {
     }
 
     public synchronized void injectAudio(File file, float volume, boolean playback) {
+        if (!file.exists()) return;
+        float clampedVolume = Math.clamp(volume, 0.0f, 1.0f);
+
         stopInjection();
 
         injectionThread = new Thread(() -> {
@@ -80,25 +85,14 @@ public class AudioRouter {
                     aisCopy = AudioSystem.getAudioInputStream(outputFormat, aisCopy);
                 }
 
-                if (playback) {
-                    try {
-                        clip = AudioSystem.getClip();
-                        clip.open(ais);
-                        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                        float value = clamp(volume, -20, gainControl.getMaximum());
-                        gainControl.setValue(value);
-                        clip.start();
-                    } catch (LineUnavailableException e) {
-                        System.err.println(e.getMessage());
-                    }
-                }
+                if (playback) localAudioPlayer.start(file, clampedVolume);
 
                 isPlaying = true;
                 byte[] buffer = new byte[OUTPUT_BUFFER_SIZE];
                 int bytesRead;
                 while (isPlaying && (bytesRead = aisCopy.read(buffer)) != -1) {
                     if (Thread.currentThread().isInterrupted()) break;
-                    scaleVolume(buffer, bytesRead, format, volume);
+                    scaleVolume(buffer, bytesRead, format, clampedVolume);
                     outputLine.write(buffer, 0, bytesRead);
                 }
 
@@ -122,9 +116,7 @@ public class AudioRouter {
             injectionThread.interrupt();
         }
 
-        if (clip != null && clip.isOpen()) {
-            clip.stop();
-        }
+        localAudioPlayer.stop();
 
         outputLine.flush();
     }
@@ -162,9 +154,5 @@ public class AudioRouter {
                 buffer[i] = (byte) (sample + 128);
             }
         }
-    }
-
-    private static float clamp(float value, float min, float max) {
-        return Math.max(min, Math.min(max, min + value * (max - min)));
     }
 }
