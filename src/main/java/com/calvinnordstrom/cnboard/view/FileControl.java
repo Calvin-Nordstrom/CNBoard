@@ -25,7 +25,7 @@ public class FileControl {
         this.value = value;
         this.filter = filter;
         label = new Label(text);
-        fileName = new Label(value.getName());
+        fileName = new Label(value.get().getName());
 
         init();
         initEventHandlers();
