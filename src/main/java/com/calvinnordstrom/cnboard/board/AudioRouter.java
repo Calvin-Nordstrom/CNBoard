@@ -76,13 +76,11 @@ public class AudioRouter {
         injectionThread = new Thread(() -> {
             try {
                 AudioInputStream ais = AudioSystem.getAudioInputStream(file);
-                AudioInputStream aisCopy = AudioSystem.getAudioInputStream(file);
                 AudioFormat format = ais.getFormat();
                 AudioFormat outputFormat = outputLine.getFormat();
 
                 if (!format.matches(outputFormat)) {
                     ais = AudioSystem.getAudioInputStream(outputFormat, ais);
-                    aisCopy = AudioSystem.getAudioInputStream(outputFormat, aisCopy);
                 }
 
                 if (playback) localAudioPlayer.start(file, clampedVolume);
@@ -90,14 +88,13 @@ public class AudioRouter {
                 isPlaying = true;
                 byte[] buffer = new byte[OUTPUT_BUFFER_SIZE];
                 int bytesRead;
-                while (isPlaying && (bytesRead = aisCopy.read(buffer)) != -1) {
+                while (isPlaying && (bytesRead = ais.read(buffer)) != -1) {
                     if (Thread.currentThread().isInterrupted()) break;
                     scaleVolume(buffer, bytesRead, format, clampedVolume);
                     outputLine.write(buffer, 0, bytesRead);
                 }
 
                 ais.close();
-                aisCopy.close();
             } catch (UnsupportedAudioFileException | IOException e) {
                 System.err.println(e.getMessage());
             } finally {
