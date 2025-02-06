@@ -102,11 +102,17 @@ public class AudioRouter {
                         outputLine.write(buffer, 0, bytesRead);
                     }
                 } else {
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        break;
+                    int available = inputLine.available();
+                    if (available > 0) {
+                        int bytesToRead = Math.min(available, buffer.length);
+                        inputLine.read(buffer, 0, bytesToRead);
+                    } else {
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
                     }
                 }
             }
@@ -120,12 +126,16 @@ public class AudioRouter {
      * scaling.
      * <p>
      * The method reads the audio data from the given file and, if necessary,
-     * converts it to match the output line's audio format. If the file does
-     * not exist, the method returns without action. The provided volume
-     * is clamped between 0.0 and 1.0 before being applied. If the
-     * {@code playback} flag is set to {@code true}, the audio is also played
-     * locally using the local audio player. Audio injection is handled in a
-     * separate thread.
+     * converts it to match the output line's audio format. If an audio file is
+     * already being injected, this method will cancel it and inject the new
+     * audio file. If the specified file does not exist, the method returns
+     * without action. The provided volume is clamped between 0.0 and 1.0
+     * before being applied. If the {@code playback} flag is set to
+     * {@code true}, the audio is also played locally using the local audio
+     * player. Audio injection is handled in a separate thread.
+     * </p>
+     * While audio is being injected, the data routed from the input line to
+     * the output line is paused.
      * </p>
      *
      * @param file the audio file to inject
