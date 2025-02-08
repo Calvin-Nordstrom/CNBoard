@@ -5,10 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class InputHandler {
-    private static final long COOLDOWN_MS = 100;
     private final BoardModel model;
     private final Set<Integer> activeKeys = new HashSet<>();
-    private long lastPressedTime = 0;
 
     public InputHandler(BoardModel model) {
         this.model = model;
@@ -19,8 +17,6 @@ public class InputHandler {
             model.getRouter().stopInjection();
         }
 
-        if (lastPressedTime + COOLDOWN_MS > System.currentTimeMillis()) return;
-
         if (!activeKeys.contains(keyCode)) {
             for (Sound sound : model.getSounds()) {
                 if (sound.getKeyCode() == keyCode) {
@@ -30,7 +26,6 @@ public class InputHandler {
                             float volume = (float) sound.getVolume() / 100;
                             boolean playback = model.getSettings().canHearSounds();
                             model.getRouter().injectAudio(soundFile, volume, playback);
-                            lastPressedTime = System.currentTimeMillis();
                         }
                     }
                 }
