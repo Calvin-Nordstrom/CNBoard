@@ -13,8 +13,11 @@ public class InputHandler {
     }
 
     public void onKeyPressed(int keyCode) {
-        if (keyCode == model.getSettings().getStopSoundsKeyCode()) {
-            model.getRouter().stopInjection();
+        Settings settings = model.getSettings();
+        AudioRouter router = model.getRouter();
+
+        if (keyCode == settings.getStopSoundsKeyCode()) {
+            router.stopInjection();
         }
 
         if (!activeKeys.contains(keyCode)) {
@@ -24,8 +27,9 @@ public class InputHandler {
                         File soundFile = sound.getSoundFile();
                         if (soundFile.exists()) {
                             float volume = (float) sound.getVolume() / 100;
-                            boolean playback = model.getSettings().canHearSounds();
-                            model.getRouter().injectAudio(soundFile, volume, playback);
+                            boolean playback = settings.canHearSounds();
+                            router.injectAudio(soundFile, volume, playback);
+                            break;
                         }
                     }
                 }
