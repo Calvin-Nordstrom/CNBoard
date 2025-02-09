@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class SliderControl {
@@ -31,8 +32,11 @@ public class SliderControl {
         HBox labelPane = new HBox(label);
         HBox sliderPane = new HBox(slider);
         HBox symbolPane = new HBox(symbolLabel);
-        HBox hbox = new HBox(sliderPane, textField, symbolPane);
-        view.getChildren().addAll(labelPane, hbox);
+        HBox hBox = new HBox(sliderPane, textField, symbolPane);
+        view.getChildren().addAll(labelPane, hBox);
+
+        HBox.setHgrow(slider, Priority.ALWAYS);
+        HBox.setHgrow(sliderPane, Priority.ALWAYS);
 
         label.getStyleClass().addAll("text", "title");
         labelPane.getStyleClass().add("control_label-pane");
@@ -41,7 +45,7 @@ public class SliderControl {
         textField.getStyleClass().add("slider-control_text-field");
         symbolLabel.getStyleClass().addAll("text", "title");
         symbolPane.getStyleClass().add("slider-control_symbol-pane");
-        hbox.getStyleClass().add("slider-control_hbox");
+        hBox.getStyleClass().add("slider-control_hBox");
     }
 
     private void initEventHandlers() {

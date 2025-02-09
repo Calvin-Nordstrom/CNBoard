@@ -227,8 +227,6 @@
 }
 
 .sound-control_scroll-pane {
-  -fx-min-width: 256;
-  -fx-max-width: 256;
   -fx-background-color: -cn-pane-color2;
   -fx-border-style: solid;
   -fx-border-width: 0 1 0 0;
@@ -294,7 +292,7 @@
   -fx-alignment: center-left;
 }
 
-.slider-control_hbox {
+.slider-control_hBox {
   -fx-spacing: 5;
   -fx-alignment: center-left;
 }
