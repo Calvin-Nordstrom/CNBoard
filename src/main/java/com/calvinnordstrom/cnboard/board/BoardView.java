@@ -4,26 +4,30 @@ import com.calvinnordstrom.cnboard.util.LocalAudioPlayer;
 import com.calvinnordstrom.cnboard.util.Resources;
 import com.calvinnordstrom.cnboard.view.*;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BoardView {
     private final BoardModel model;
     private final BoardController controller;
     private final BorderPane view = new BorderPane();
     private final FlowPane soundsPane = new FlowPane();
-    private final Button newButton = new Button("New Sound");
     private final LocalAudioPlayer localAudioPlayer = new LocalAudioPlayer();
+    private String searchText;
+    private final Map<Sound, SoundNode> soundNodes = new HashMap<>();
+    private final Map<Sound, SoundControl> soundControls = new HashMap<>();
     private SoundNode selectedSound;
 
     public BoardView(BoardModel model, BoardController controller) {
@@ -45,12 +49,24 @@ public class BoardView {
     private void initTop() {
         BorderPane boardTop = new BorderPane();
 
-        boardTop.setRight(newButton);
+        TextField searchBar = new TextField();
+        searchBar.setPromptText("Search sounds");
+        searchBar.textProperty().addListener((_, _, newValue) -> {
+            searchText = newValue;
+            renderSounds(false);
+        });
+
+        Button newButton = new Button("New Sound");
+
+        HBox right = new HBox(searchBar, newButton);
+        boardTop.setRight(right);
 
         view.setTop(boardTop);
 
-        newButton.getStyleClass().add("board-top_new-button");
         boardTop.getStyleClass().add("board-top");
+        searchBar.getStyleClass().add("board-top_search-bar");
+        newButton.getStyleClass().add("board-top_new-button");
+        right.getStyleClass().add("board-top_right");
     }
 
     private void initLeft() {
@@ -58,9 +74,13 @@ public class BoardView {
     }
 
     private void initCenter() {
-        renderSounds();
+        populateSoundNodes();
+        populateSoundControls();
+        renderSounds(true);
         model.getSounds().addListener((ListChangeListener<Sound>) _ -> {
-            renderSounds();
+            populateSoundNodes();
+            populateSoundControls();
+            renderSounds(true);
         });
 
         ScrollPane scrollPane = createScrollPane(soundsPane);
@@ -91,41 +111,92 @@ public class BoardView {
         boardControlPane.getStyleClass().add("board-control-pane");
     }
 
-    private void renderSounds() {
+    private void renderSounds(boolean selectFirst) {
         soundsPane.getChildren().clear();
-        ObservableList<Sound> sounds = model.getSounds();
-        if (sounds.isEmpty()) view.setLeft(null);
+
+        if (model.getSounds().isEmpty()) {
+            view.setLeft(null);
+            return;
+        }
+
+        List<Sound> sounds = getSoundsByTitle(searchText);
+
+        if (sounds.isEmpty()) {
+            setSelectedSound(model.getSounds().getFirst());
+            return;
+        }
+
         for (Sound sound : sounds) {
-            SoundNode soundNode = new SoundNode(sound);
-            if (sounds.getFirst().equals(sound)) {
-                setSelectedSound(soundNode);
+            SoundNode soundNode = soundNodes.get(sound);
+            if (soundNode != null) {
+                if (selectFirst && sounds.getFirst().equals(sound)) {
+                    setSelectedSound(sound);
+                }
+                soundNode.asNode().setOnMouseClicked(_ -> {
+                    setSelectedSound(sound);
+                });
+                soundsPane.getChildren().add(soundNode.asNode());
             }
-            soundNode.asNode().addEventFilter(MouseEvent.MOUSE_CLICKED, _ -> {
-                setSelectedSound(soundNode);
-            });
-            soundsPane.getChildren().add(soundNode.asNode());
         }
     }
 
-    private void setSelectedSound(SoundNode soundNode) {
-        if (soundNode.equals(selectedSound)) return;
+    private void setSelectedSound(Sound sound) {
+        SoundNode soundNode = soundNodes.get(sound);
 
-        localAudioPlayer.stop();
+        if (soundNode != null) {
+            if (soundNode.equals(selectedSound)) {
+                return;
+            }
 
-        SoundControl soundControl = new SoundControl(soundNode.getSound());
-        Region content = (Region) soundControl.asNode();
+            localAudioPlayer.stop();
 
-        ScrollPane scrollPane = createScrollPane(content);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        view.setLeft(scrollPane);
+            SoundControl soundControl = soundControls.get(sound);
+            Region content = (Region) soundControl.asNode();
+            ScrollPane scrollPane = createScrollPane(content);
+            scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+            view.setLeft(scrollPane);
 
-        if (selectedSound != null) {
-            selectedSound.asNode().getStyleClass().remove("selected-sound");
+            if (selectedSound != null) {
+                selectedSound.asNode().getStyleClass().remove("selected-sound");
+            }
+            selectedSound = soundNode;
+            soundNode.asNode().getStyleClass().add("selected-sound");
+
+            scrollPane.getStyleClass().add("sound-control_scroll-pane");
         }
-        selectedSound = soundNode;
-        soundNode.asNode().getStyleClass().add("selected-sound");
+    }
 
-        scrollPane.getStyleClass().add("sound-control_scroll-pane");
+    private List<Sound> getSoundsByTitle(String title) {
+        List<Sound> sounds = new ArrayList<>();
+        if (title == null || title.isEmpty()) {
+            return model.getSounds();
+        }
+        for (Sound sound : model.getSounds()) {
+            String soundTitle = sound.getTitle().toLowerCase();
+            String argTitle = title.toLowerCase();
+            if (soundTitle.contains(argTitle)) {
+                sounds.add(sound);
+            }
+        }
+        return sounds;
+    }
+
+    private void populateSoundNodes() {
+        if (!soundNodes.isEmpty()) {
+            soundNodes.clear();
+        }
+        for (Sound sound : model.getSounds()) {
+            soundNodes.put(sound, new SoundNode(sound));
+        }
+    }
+
+    private void populateSoundControls() {
+        if (!soundControls.isEmpty()) {
+            soundControls.clear();
+        }
+        for (Sound sound : model.getSounds()) {
+            soundControls.put(sound, new SoundControl(sound));
+        }
     }
 
     public Node asNode() {

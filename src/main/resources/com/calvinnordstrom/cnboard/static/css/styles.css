@@ -18,7 +18,7 @@
   -cn-hovered-border: #7ab0e3;
   
   -cn-control-bg-color: #282828;
-  -cn-control-border-color: #444444;
+  -cn-control-border-color: #484848;
   -cn-control-hovered-bg-color1: #313131;
   -cn-control-hovered-bg-color2: #585858;
   -cn-control-pressed-bg-color: #1f1f1f;
@@ -332,6 +332,10 @@
   -fx-padding: 10;
 }
 
+.board-top_search-bar {
+  -fx-min-width: 250;
+}
+
 .board-top_new-button {
   -fx-font-size: 14;
   -fx-text-fill: -cn-text-color2;
@@ -345,6 +349,11 @@
 
 .board-top_new-button:pressed {
   -fx-background-color: -cn-new-pressed-bg-color;
+}
+
+.board-top_right {
+  -fx-alignment: center;
+  -fx-spacing: 10;
 }
 
 .vertical-divider {
