@@ -4,17 +4,14 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import org.jnativehook.keyboard.NativeKeyEvent;
 
 public class Settings {
     private final BooleanProperty hearSounds = new SimpleBooleanProperty(true);
-    private final IntegerProperty stopSoundsKeyCode = new SimpleIntegerProperty(NativeKeyEvent.VC_P);
+    private final IntegerProperty stopSoundsKeyCode = new SimpleIntegerProperty(0);
 
     public Settings() {
 
     }
-
-    // Hear sounds methods
 
     public boolean canHearSounds() {
         return hearSounds.get();
@@ -27,8 +24,6 @@ public class Settings {
     public BooleanProperty hearSoundsProperty() {
         return hearSounds;
     }
-
-    // Stop sounds key code methods
 
     public int getStopSoundsKeyCode() {
         return stopSoundsKeyCode.get();
