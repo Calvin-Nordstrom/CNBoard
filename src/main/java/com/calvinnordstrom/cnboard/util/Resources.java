@@ -1,9 +1,16 @@
 package com.calvinnordstrom.cnboard.util;
 
+import com.calvinnordstrom.cnboard.Main;
+
 import java.io.File;
+import java.net.URL;
+import java.util.Objects;
 
 public final class Resources {
     private static final String DEFAULT_PATH = "src/main/resources/com/calvinnordstrom/cnboard/static/";
+
+    public static final String STYLES_PATH = getPath("static/css/styles.css");
+
     public static final File DEFAULT_ICON_FILE = new File(DEFAULT_PATH + "icons/default.png");
 
     public static final File BRUH_ICON_FILE = new File(DEFAULT_PATH + "icons/bruh.png");
@@ -13,4 +20,12 @@ public final class Resources {
     public static final File TACO_BELL_SOUND_FILE = new File(DEFAULT_PATH + "sounds/taco_bell.wav");
 
     private Resources() {}
+
+    private static URL getUrl(String localPath) {
+        return Objects.requireNonNull(Main.class.getResource(localPath));
+    }
+
+    private static String getPath(String localPath) {
+        return getUrl(localPath).toExternalForm();
+    }
 }

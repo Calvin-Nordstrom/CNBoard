@@ -7,19 +7,19 @@ public class BoardController {
         this.model = model;
     }
 
-    public void onAddSound(Sound sound) {
+    public void addSound(Sound sound) {
         model.addSound(sound);
     }
 
-    public void onRemoveSound(Sound sound) {
+    public void removeSound(Sound sound) {
         model.removeSound(sound);
     }
 
-    public void onKeyPressed(int keyCode) {
+    public void keyPress(int keyCode) {
         model.keyPress(keyCode);
     }
 
-    public void onKeyReleased(int keyCode) {
+    public void keyRelease(int keyCode) {
         model.keyRelease(keyCode);
     }
 }

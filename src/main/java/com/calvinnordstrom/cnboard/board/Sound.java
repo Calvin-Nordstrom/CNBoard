@@ -110,7 +110,7 @@ public class Sound {
         private String title = "New Sound";
         private File iconFile = Resources.DEFAULT_ICON_FILE;
         private File soundFile;
-        private int keyCode;
+        private int keyCode = 0;
         private double volume = 100.0d;
         private boolean enabled = true;
 
@@ -145,6 +145,21 @@ public class Sound {
         }
 
         public Sound build() {
+            if (title == null) {
+                throw new IllegalArgumentException("Title cannot be null");
+            }
+            if (iconFile == null || !iconFile.exists()) {
+                throw new IllegalArgumentException("Icon file must exist");
+            }
+            if (soundFile == null || !soundFile.exists()) {
+                throw new IllegalArgumentException("Sound file must exist");
+            }
+            if (keyCode < 0) {
+                throw new IllegalArgumentException("Key code cannot be negative");
+            }
+            if (volume < 0 || volume > 100) {
+                throw new IllegalArgumentException("Volume must be between 0 and 100");
+            }
             return new Sound(this);
         }
     }

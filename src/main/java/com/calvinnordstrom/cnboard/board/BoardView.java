@@ -3,13 +3,19 @@ package com.calvinnordstrom.cnboard.board;
 import com.calvinnordstrom.cnboard.util.LocalAudioPlayer;
 import com.calvinnordstrom.cnboard.util.Resources;
 import com.calvinnordstrom.cnboard.view.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
@@ -25,9 +31,9 @@ public class BoardView {
     private final BorderPane view = new BorderPane();
     private final FlowPane soundsPane = new FlowPane();
     private final LocalAudioPlayer localAudioPlayer = new LocalAudioPlayer();
-    private String searchText;
     private final Map<Sound, SoundNode> soundNodes = new HashMap<>();
     private final Map<Sound, SoundControl> soundControls = new HashMap<>();
+    private String searchText;
     private SoundNode selectedSound;
 
     public BoardView(BoardModel model, BoardController controller) {
@@ -57,6 +63,10 @@ public class BoardView {
         });
 
         Button newButton = new Button("New Sound");
+        newButton.setOnMouseClicked(_ -> {
+            SoundCreator soundCreator = new SoundCreator(newButton.getScene().getWindow());
+            soundCreator.show();
+        });
 
         HBox right = new HBox(searchBar, newButton);
         boardTop.setRight(right);
@@ -77,10 +87,22 @@ public class BoardView {
         populateSoundNodes();
         populateSoundControls();
         renderSounds(true);
-        model.getSounds().addListener((ListChangeListener<Sound>) _ -> {
+        model.getSounds().addListener((ListChangeListener<Sound>) c -> {
             populateSoundNodes();
             populateSoundControls();
-            renderSounds(true);
+//            renderSounds(true);
+//            if (c.wasAdded()) {
+//                setSelectedSound(model.getSounds().getLast());
+//            }
+
+            while (c.next()) {
+                if (c.wasRemoved()) {
+                    renderSounds(true);
+                } else if (c.wasAdded()) {
+                    renderSounds(false);
+                    setSelectedSound(model.getSounds().getLast());
+                }
+            }
         });
 
         ScrollPane scrollPane = createScrollPane(soundsPane);
@@ -237,8 +259,7 @@ public class BoardView {
 
             view.getStyleClass().add("sound-node");
             iconView.getStyleClass().add("sound-node_icon-view");
-            titleLabel.getStyleClass().addAll("text", "title", "sound-node_title");
-            keyCodeLabel.getStyleClass().add("text");
+            titleLabel.getStyleClass().addAll("title", "sound-node_title");
         }
 
         public Sound getSound() {
@@ -302,14 +323,14 @@ public class BoardView {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete \"" + sound.getTitle() + "\"?");
                 alert.showAndWait()
                         .filter(response -> response == ButtonType.OK)
-                        .ifPresent(_ -> controller.onRemoveSound(sound));
+                        .ifPresent(_ -> controller.removeSound(sound));
             });
             HBox deleteControl = new HBox(deleteButton);
 
             view.getChildren().addAll(title, iconView, titleControl.asNode(), keybindControl.asNode(), enabledControl.asNode(), soundFileControl.asNode(), iconFileControl.asNode(), volumeControl.asNode(), playbackControl, createHorizontalDivider(), deleteControl);
 
             view.getStyleClass().add("sound-control");
-            title.getStyleClass().addAll("text", "sound-control_title");
+            title.getStyleClass().add("sound-control_title");
             iconView.getStyleClass().add("sound-control_icon-view");
             playbackControl.getStyleClass().add("sound-control_playback-control");
             deleteButton.getStyleClass().add("sound-control_delete-button");
@@ -322,6 +343,88 @@ public class BoardView {
 
         public Node asNode() {
             return view;
+        }
+    }
+
+    private class SoundCreator {
+        private static final String TITLE = "Upload Sound";
+        private final Window owner;
+        private final Stage stage = new Stage();
+        private final Label errorLabel = new Label();
+        private Scene scene;
+
+        public SoundCreator(Window owner) {
+            this.owner = owner;
+
+            init();
+        }
+
+        private void init() {
+            stage.initOwner(owner);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setTitle(TITLE);
+            stage.setResizable(false);
+
+            ObjectProperty<File> fileProperty = new SimpleObjectProperty<>();
+            FileChooser.ExtensionFilter soundFilter = new FileChooser.ExtensionFilter("WAV Files", "*.wav");
+            FileControl fileControl = new FileControl("Sound file", fileProperty, soundFilter);
+            fileProperty.addListener((_, _, _) -> {
+                errorLabel.setVisible(false);
+            });
+
+            errorLabel.setVisible(false);
+
+            VBox vBox = new VBox(fileControl.asNode(), errorLabel);
+
+            BorderPane borderPane = new BorderPane();
+            Button okButton = getOkButton(fileProperty);
+            Button cancelButton = new Button("Cancel");
+            cancelButton.setOnMouseClicked(_ -> hide());
+            HBox right = new HBox(okButton, cancelButton);
+            borderPane.setRight(right);
+
+            VBox content = new VBox(vBox, createHorizontalDivider(), borderPane);
+            Pane root = new Pane(content);
+
+            scene = new Scene(root);
+            scene.getStylesheets().add(Resources.STYLES_PATH);
+
+            errorLabel.getStyleClass().add("sound-creator_error-label");
+            vBox.getStyleClass().add("sound-creator_vBox");
+            content.getStyleClass().add("sound-creator_content");
+            right.getStyleClass().add("sound-creator_right");
+            okButton.getStyleClass().add("button-width-100");
+            cancelButton.getStyleClass().add("button-width-100");
+        }
+
+        private Button getOkButton(ObjectProperty<File> fileProperty) {
+            Button button = new Button("OK");
+            button.setOnMouseClicked(_ -> {
+                Sound.Builder builder = new Sound.Builder();
+                builder.soundFile(fileProperty.get());
+                try {
+                    Sound sound = builder.build();
+                    controller.addSound(sound);
+                    hide();
+                } catch (IllegalArgumentException e) {
+                    errorLabel.setText(e.getMessage());
+                    errorLabel.setVisible(true);
+                }
+            });
+            return button;
+        }
+
+        public void show() {
+            if (scene != null) {
+                stage.setScene(scene);
+                stage.sizeToScene();
+            }
+            stage.show();
+        }
+
+        public void hide() {
+            stage.hide();
+            stage.setScene(null);
         }
     }
 
@@ -346,9 +449,9 @@ public class BoardView {
     }
 
     private static ScrollPane createScrollPane(Node content) {
-        ScrollPane sp = new ScrollPane(content);
-        sp.setFitToWidth(true);
-        sp.setFitToHeight(true);
-        return sp;
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        return scrollPane;
     }
 }

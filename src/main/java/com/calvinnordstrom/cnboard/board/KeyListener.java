@@ -15,11 +15,11 @@ public class KeyListener implements NativeKeyListener {
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent event) {
-        controller.onKeyPressed(event.getKeyCode());
+        controller.keyPress(event.getKeyCode());
     }
 
     @Override
     public void nativeKeyReleased(NativeKeyEvent event) {
-        controller.onKeyReleased(event.getKeyCode());
+        controller.keyRelease(event.getKeyCode());
     }
 }
