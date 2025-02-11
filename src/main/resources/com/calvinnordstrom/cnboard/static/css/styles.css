@@ -230,7 +230,8 @@
 }
 
 .sound-control_scroll-pane {
-  -fx-max-width: 150;
+  -fx-min-width: 250;
+  -fx-max-width: 250;
   -fx-background-color: -cn-pane-color2;
   -fx-border-style: solid;
   -fx-border-width: 0 1 0 0;
@@ -288,7 +289,7 @@
 }
 
 .slider-control_text-field {
-  -fx-pref-width: 64;
+  -fx-pref-width: 80;
 }
 
 .slider-control_symbol-pane {
@@ -309,6 +310,10 @@
 .keybind-control_keybind-pane {
   -fx-spacing: 5;
   -fx-alignment: center-left;
+}
+
+.string-control_text-field {
+  -fx-min-width: 100;
 }
 
 .board-control-pane {
