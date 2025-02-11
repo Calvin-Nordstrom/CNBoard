@@ -31,7 +31,6 @@ public class StringControl {
         HBox.setHgrow(textField, Priority.ALWAYS);
         label.getStyleClass().add("title");
         labelPane.getStyleClass().add("control_label-pane");
-        textField.getStyleClass().add("text-field");
     }
 
     private void initEventHandlers() {
