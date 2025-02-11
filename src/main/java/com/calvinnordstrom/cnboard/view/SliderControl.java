@@ -38,12 +38,12 @@ public class SliderControl {
         HBox.setHgrow(slider, Priority.ALWAYS);
         HBox.setHgrow(sliderPane, Priority.ALWAYS);
 
-        label.getStyleClass().addAll("text", "title");
+        label.getStyleClass().add("title");
         labelPane.getStyleClass().add("control_label-pane");
         slider.getStyleClass().add("slider-control_slider");
         sliderPane.getStyleClass().add("slider-control_slider-pane");
         textField.getStyleClass().add("slider-control_text-field");
-        symbolLabel.getStyleClass().addAll("text", "title");
+        symbolLabel.getStyleClass().add("title");
         symbolPane.getStyleClass().add("slider-control_symbol-pane");
         hBox.getStyleClass().add("slider-control_hBox");
     }

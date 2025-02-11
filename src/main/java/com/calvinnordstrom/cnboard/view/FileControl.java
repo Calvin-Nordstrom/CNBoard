@@ -19,13 +19,15 @@ public class FileControl {
     private final Label label;
     private final Button fileButton = new Button("Choose file");
     private final Label fileName;
+    private final String initialName;
 
     public FileControl(String text, ObjectProperty<File> value,
                        FileChooser.ExtensionFilter filter) {
         this.value = value;
         this.filter = filter;
         label = new Label(text);
-        fileName = new Label(value.get().getName());
+        initialName = value.get() == null ? "No file selected" : value.get().getName();
+        fileName = new Label(initialName);
 
         init();
         initEventHandlers();
@@ -33,14 +35,13 @@ public class FileControl {
 
     private void init() {
         HBox labelPane = new HBox(label);
-        fileName.setTooltip(new Tooltip(value.getValue().getName()));
+        fileName.setTooltip(new Tooltip(initialName));
         HBox filePane = new HBox(fileButton, fileName);
         view.getChildren().addAll(labelPane, filePane);
 
-        label.getStyleClass().addAll("text", "title");
+        label.getStyleClass().add("title");
         labelPane.getStyleClass().add("control_label-pane");
         fileButton.getStyleClass().add("button-width-100");
-        fileName.getStyleClass().add("text");
         filePane.getStyleClass().add("file-control_file-pane");
     }
 

@@ -34,10 +34,10 @@ public class KeybindControl implements NativeKeyListener {
         HBox keybindPane = new HBox(keybindButton, keyCodeLabel);
         view.getChildren().addAll(labelPane, keybindPane);
 
-        label.getStyleClass().addAll("text", "title");
+        label.getStyleClass().add("title");
         labelPane.getStyleClass().add("control_label-pane");
         keybindButton.getStyleClass().add("button-width-100");
-        keyCodeLabel.getStyleClass().addAll("text", "title");
+        keyCodeLabel.getStyleClass().add("title");
         keybindPane.getStyleClass().add("keybind-control_keybind-pane");
     }
 

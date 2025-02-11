@@ -29,7 +29,7 @@ public class StringControl {
         view.getChildren().addAll(labelPane, textFieldPane);
 
         HBox.setHgrow(textField, Priority.ALWAYS);
-        label.getStyleClass().addAll("text", "title");
+        label.getStyleClass().add("title");
         labelPane.getStyleClass().add("control_label-pane");
         textField.getStyleClass().add("text-field");
     }

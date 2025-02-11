@@ -32,6 +32,8 @@
   -cn-new-border-color: #ffffff;
   -cn-new-hovered-bg-color: #008cd0;
   -cn-new-pressed-bg-color: #2870b4;
+
+  -cn-error-color: #c05050;
 }
 
 .text-field {
@@ -48,6 +50,11 @@
 .text-field:focused {
   -fx-border-color: -cn-focused-border;
   -fx-background-color: -cn-control-hovered-bg-color1;
+}
+
+.label {
+  -fx-font-size: 14;
+  -fx-text-fill: -cn-text-color1;
 }
 
 .button {
@@ -151,10 +158,6 @@
   -fx-min-width: 100;
 }
 
-.text {
-  -fx-text-fill: -cn-text-color1;
-}
-
 .title {
   -fx-font-size: 14;
 }
@@ -227,6 +230,7 @@
 }
 
 .sound-control_scroll-pane {
+  -fx-max-width: 150;
   -fx-background-color: -cn-pane-color2;
   -fx-border-style: solid;
   -fx-border-width: 0 1 0 0;
@@ -370,6 +374,27 @@
 
 .root {
   -fx-background-color: transparent;
+}
+
+.sound-creator_error-label {
+  -fx-text-fill: -cn-error-color;
+}
+
+.sound-creator_vBox {
+  -fx-spacing: 10;
+}
+
+.sound-creator_content {
+  -fx-background-color: -cn-pane-color2;
+  -fx-spacing: 20;
+  -fx-min-width: 300;
+  -fx-max-width: 300;
+  /* -fx-min-height: 270; */
+  -fx-padding: 10;
+}
+
+.sound-creator_right {
+  -fx-spacing: 10;
 }
 
 .title-bar {

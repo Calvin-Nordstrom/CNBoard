@@ -23,7 +23,7 @@ public class ToggleControl {
         view.getChildren().add(checkBox);
 
         view.getStyleClass().add("control_label-pane");
-        checkBox.getStyleClass().addAll("text", "title");
+        checkBox.getStyleClass().add("title");
     }
 
     private void initEventHandlers() {
