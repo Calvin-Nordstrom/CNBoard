@@ -7,9 +7,9 @@ import java.net.URL;
 import java.util.Objects;
 
 public final class Resources {
-    private static final String DEFAULT_PATH = "src/main/resources/com/calvinnordstrom/cnboard/static/";
+    private static final String DEFAULT_PATH = "src/main/resources/com/calvinnordstrom/cnboard/";
 
-    public static final String STYLES_PATH = getPath("static/css/styles.css");
+    public static final String STYLES_PATH = getPath("css/styles.css");
 
     public static final File DEFAULT_ICON_FILE = new File(DEFAULT_PATH + "icons/default.png");
 
