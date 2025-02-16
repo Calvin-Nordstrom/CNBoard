@@ -55,7 +55,8 @@ public class FileManager {
 
     /**
      * Loads the list of {@link Sound} objects from the file. The list is
-     * deserialized from the {@code sounds.ser} file.
+     * deserialized from the {@code sounds.ser} file. If the file contents
+     * are invalid, a new list of {@link Sound} objects is returned.
      *
      * @return an {@link ObservableList} of {@link Sound} objects, or an empty
      * {@link ObservableList} if deserialization fails.
@@ -88,7 +89,8 @@ public class FileManager {
 
     /**
      * Loads the {@link Settings} object from the file. The settings are
-     * deserialized from the {@code settings.ser} file.
+     * deserialized from the {@code settings.ser} file. If the file contents
+     * are invalid, a new {@link Settings} object is returned.
      *
      * @return the {@link Settings} object, or a default {@link Settings}
      * object if deserialization fails.
