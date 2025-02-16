@@ -6,38 +6,35 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
 
 public class BoardModel {
-    private ObservableList<Sound> sounds;
-    private Settings settings;
+    private final ObservableList<Sound> sounds;
+    private final Settings settings;
     private final AudioRouter router;
     private final InputHandler inputHandler;
-    private final FileManager fileManager;
+    private final ModelSerializer modelSerializer;
 
     public BoardModel() {
         TargetDataLine inputLine = AudioUtils.getDefaultTarget();
         SourceDataLine outputLine = AudioUtils.getSourceByName("CABLE Input (VB-Audio Virtual Cable)");
         router = new AudioRouter(inputLine, outputLine);
         inputHandler = new InputHandler(this);
-        fileManager = new FileManager();
+        modelSerializer = new ModelSerializer();
 
-        loadModel();
+        sounds = modelSerializer.loadSounds();
+        modelSerializer.attachListeners(sounds);
+
+        settings = modelSerializer.loadSettings();
+        modelSerializer.attachListeners(settings);
 
         router.start();
     }
 
+    /**
+     * Saves the model objects to storage, including the list of {@link Sound}
+     * objects and the {@link Settings} object.
+     */
     public void saveModel() {
-        fileManager.saveSounds(sounds);
-        fileManager.saveSettings(settings);
-    }
-
-    private void loadModel() {
-        boolean soundsFileExists = fileManager.soundsFileExists();
-        sounds = fileManager.loadSounds();
-        settings = fileManager.loadSettings();
-
-        if (!soundsFileExists) {
-            sounds.add(Sounds.createBruhSound());
-            sounds.add(Sounds.createTacoBellSound());
-        }
+        modelSerializer.saveSounds(sounds);
+        modelSerializer.saveSettings(settings);
     }
 
     public void keyPress(int keyCode) {
