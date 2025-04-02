@@ -35,8 +35,8 @@ public class BoardModel {
     }
 
     /**
-     * Saves the model objects to storage, including the list of {@link Sound}
-     * objects and the {@link Settings} object.
+     * Saves the model objects to storage, including the list of {@code Sound}
+     * objects and the {@code Settings} object.
      */
     public void saveModel() {
         modelSerializer.saveSounds(sounds);

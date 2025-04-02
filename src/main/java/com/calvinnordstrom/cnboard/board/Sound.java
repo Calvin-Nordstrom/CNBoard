@@ -23,7 +23,7 @@ import java.io.*;
  *
  * <p>These properties can be bound to UI components and observed for changes.
  * </p>
- * <p>This class implements {@link Serializable} to allow for persistence with
+ * <p>This class implements {@code Serializable} to allow for persistence with
  * files.</p>
  */
 public class Sound implements Serializable {
@@ -64,11 +64,11 @@ public class Sound implements Serializable {
     }
 
     /**
-     * Returns the {@link StringProperty} for the title of the sound. This can
+     * Returns the {@code StringProperty} for the title of the sound. This can
      * be used for binding UI components to the property and observed for
      * changes.
      *
-     * @return the {@link StringProperty} for the title
+     * @return the {@code StringProperty} for the title
      */
     public StringProperty titleProperty() {
         return title;
@@ -93,16 +93,14 @@ public class Sound implements Serializable {
     }
 
     /**
-     * Returns the {@link ObjectProperty} for the icon file. This can be used
+     * Returns the {@code ObjectProperty} for the icon file. This can be used
      * for binding UI components to the property and observed for changes.
      *
-     * @return the {@link ObjectProperty} for the icon file
+     * @return the {@code ObjectProperty} for the icon file
      */
     public ObjectProperty<File> iconFileProperty() {
         return iconFile;
     }
-
-    // Sound file methods
 
     /**
      * Returns the sound file associated with the sound.
@@ -123,16 +121,14 @@ public class Sound implements Serializable {
     }
 
     /**
-     * Returns the {@link ObjectProperty} for the sound file. This can be used
+     * Returns the {@code ObjectProperty} for the sound file. This can be used
      * for binding UI components to the property and observed for changes.
      *
-     * @return the {@link ObjectProperty} for the sound file
+     * @return the {@code ObjectProperty} for the sound file
      */
     public ObjectProperty<File> soundFileProperty() {
         return soundFile;
     }
-
-    // Key code methods
 
     /**
      * Returns the key code that triggers the sound.
@@ -153,16 +149,14 @@ public class Sound implements Serializable {
     }
 
     /**
-     * Returns the {@link IntegerProperty} for the key code. This can be used
+     * Returns the {@code IntegerProperty} for the key code. This can be used
      * for binding UI components to the property and observed for changes.
      *
-     * @return the {@link IntegerProperty} for the key code
+     * @return the {@code IntegerProperty} for the key code
      */
     public IntegerProperty keyCodeProperty() {
         return keyCode;
     }
-
-    // Volume methods
 
     /**
      * Returns the volume level of the sound.
@@ -183,16 +177,14 @@ public class Sound implements Serializable {
     }
 
     /**
-     * Returns the {@link DoubleProperty} for the volume. This can be used for
+     * Returns the {@code DoubleProperty} for the volume. This can be used for
      * binding UI components to the property and observed for changes.
      *
-     * @return the {@link DoubleProperty} for the volume
+     * @return the {@code DoubleProperty} for the volume
      */
     public DoubleProperty volumeProperty() {
         return volume;
     }
-
-    // Enabled methods
 
     /**
      * Returns whether the sound is enabled.
@@ -214,18 +206,18 @@ public class Sound implements Serializable {
     }
 
     /**
-     * Returns the {@link BooleanProperty} for whether the sound is enabled.
+     * Returns the {@code BooleanProperty} for whether the sound is enabled.
      * This can be used for binding UI components to the property and observed
      * for changes.
      *
-     * @return the {@link BooleanProperty} for whether the sound is enabled
+     * @return the {@code BooleanProperty} for whether the sound is enabled
      */
     public BooleanProperty enabledProperty() {
         return enabled;
     }
 
     /**
-     * Builder class to construct a {@link Sound} object with customizable
+     * Builder class to construct a {@code Sound} object with customizable
      * properties.
      */
     public static class Builder {
@@ -304,9 +296,9 @@ public class Sound implements Serializable {
         }
 
         /**
-         * Builds a {@link Sound} object using the specified properties.
+         * Builds a {@code Sound} object using the specified properties.
          *
-         * @return a new {@link Sound} instance
+         * @return a new {@code Sound} instance
          * @throws IllegalArgumentException if any required property is invalid
          */
         public Sound build() {

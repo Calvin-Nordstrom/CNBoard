@@ -21,7 +21,7 @@ import java.io.*;
  *
  * <p>These properties can also be bound to UI components and observed for
  * changes.</p>
- * <p>This class implements {@link Serializable} to allow for persistence with
+ * <p>This class implements {@code Serializable} to allow for persistence with
  * files.</p>
  */
 public class Settings implements Serializable {
@@ -51,11 +51,11 @@ public class Settings implements Serializable {
     }
 
     /**
-     * Returns the {@link BooleanProperty} for whether sounds can be heard
+     * Returns the {@code BooleanProperty} for whether sounds can be heard
      * locally. This can be used for binding UI components to the property
      * and observed for changes.
      *
-     * @return the {@link BooleanProperty} for hearing sounds locally
+     * @return the {@code BooleanProperty} for hearing sounds locally
      */
     public BooleanProperty hearSoundsProperty() {
         return hearSounds;
@@ -80,11 +80,11 @@ public class Settings implements Serializable {
     }
 
     /**
-     * Returns the {@link IntegerProperty} for the keycode that stops the
+     * Returns the {@code IntegerProperty} for the keycode that stops the
      * sounds while playing. This can be used for binding UI components to the
      * property and observed for changes.
      *
-     * @return the {@link IntegerProperty} for the keycode that stops the
+     * @return the {@code IntegerProperty} for the keycode that stops the
      * sounds while playing
      */
     public IntegerProperty stopSoundsKeyCodeProperty() {

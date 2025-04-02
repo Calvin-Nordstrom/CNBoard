@@ -10,14 +10,14 @@ import java.util.List;
 
 /**
  * Handles the serialization and deserialization of the model, such as
- * {@link Sound} objects and {@link Settings} objects. This class provides
- * methods to save and load {@link Sound} objects and {@link Settings} objects
+ * {@code Sound} objects and {@code Settings} objects. This class provides
+ * methods to save and load {@code Sound} objects and {@code Settings} objects
  * directly, and attach listeners to the properties of these them.
  *
- * <p>When listeners are attached to {@link Sound} objects, any time the list
+ * <p>When listeners are attached to {@code Sound} objects, any time the list
  * or its elements change, it will be serialized.</p>
  *
- * <p>When listeners are attached to {@link Settings} objects, any time its
+ * <p>When listeners are attached to {@code Settings} objects, any time its
  * properties change, it will be serialized.</p>
  */
 public class ModelSerializer {
@@ -26,7 +26,7 @@ public class ModelSerializer {
     private final File settingsFile = new File(directory, "settings.ser");
 
     /**
-     * Constructs a new {@link ModelSerializer} instance. When constructed, the
+     * Constructs a new {@code ModelSerializer} instance. When constructed, the
      * directory used to store all files is created if it doesn't already
      * exist.
      */
@@ -37,11 +37,11 @@ public class ModelSerializer {
     }
 
     /**
-     * Attaches listeners to the specified list of {@link Sound} objects to
+     * Attaches listeners to the specified list of {@code Sound} objects to
      * detect changes and invoke serialization. Whenever the list or its
      * elements change, serialization occurs.
      *
-     * @param sounds the list of {@link Sound} objects
+     * @param sounds the list of {@code Sound} objects
      */
     public void attachSoundListeners(ObservableList<Sound> sounds) {
         for (Sound sound : sounds) {
@@ -84,9 +84,9 @@ public class ModelSerializer {
     }
 
     /**
-     * Saves the list of {@link Sound} objects to storage.
+     * Saves the list of {@code Sound} objects to storage.
      *
-     * @param sounds the list of {@link Sound} objects to serialize
+     * @param sounds the list of {@code Sound} objects to serialize
      */
     public void saveSounds(ObservableList<Sound> sounds) {
         try {
@@ -97,10 +97,10 @@ public class ModelSerializer {
     }
 
     /**
-     * Loads the list of {@link Sound} objects from storage. If the file does
+     * Loads the list of {@code Sound} objects from storage. If the file does
      * not exist, a new list containing default sounds is returned.
      *
-     * @return the list of {@link Sound} objects from storage
+     * @return the list of {@code Sound} objects from storage
      */
     public ObservableList<Sound> loadSounds() {
         try {
@@ -115,11 +115,11 @@ public class ModelSerializer {
     }
 
     /**
-     * Attaches listeners to the specified {@link Settings} object to
+     * Attaches listeners to the specified {@code Settings} object to
      * detect changes and invoke serialization. Whenever the properties of the
-     * {@link Settings} object change, serialization occurs.
+     * {@code Settings} object change, serialization occurs.
      *
-     * @param settings the {@link Settings} object
+     * @param settings the {@code Settings} object
      */
     public void attachSettingsListeners(Settings settings) {
         settings.hearSoundsProperty().addListener((_, _, _) -> saveSettings(settings));
@@ -127,9 +127,9 @@ public class ModelSerializer {
     }
 
     /**
-     * Saves the {@link Settings} object to storage.
+     * Saves the {@code Settings} object to storage.
      *
-     * @param settings the {@link Settings} object to serialize
+     * @param settings the {@code Settings} object to serialize
      */
     public void saveSettings(Settings settings) {
         try {
@@ -140,9 +140,9 @@ public class ModelSerializer {
     }
 
     /**
-     * Loads the {@link Settings} object from storage.
+     * Loads the {@code Settings} object from storage.
      *
-     * @return the {@link Settings} object from storage
+     * @return the {@code Settings} object from storage
      */
     public Settings loadSettings() {
         try {
