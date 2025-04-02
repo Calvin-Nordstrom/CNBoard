@@ -1,7 +1,12 @@
 package com.calvinnordstrom.cnboard.board;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Handles the serialization and deserialization of the model, such as
@@ -16,7 +21,20 @@ import javafx.collections.ObservableList;
  * properties change, it will be serialized.</p>
  */
 public class ModelSerializer {
-    private final FileManager fileManager = new FileManager();
+    private final File directory = new File(System.getenv("APPDATA"), "CNBoard");
+    private final File soundsFile = new File(directory, "sounds.ser");
+    private final File settingsFile = new File(directory, "settings.ser");
+
+    /**
+     * Constructs a new {@link ModelSerializer} instance. When constructed, the
+     * directory used to store all files is created if it doesn't already
+     * exist.
+     */
+    public ModelSerializer() {
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+    }
 
     /**
      * Attaches listeners to the specified list of {@link Sound} objects to
@@ -25,7 +43,7 @@ public class ModelSerializer {
      *
      * @param sounds the list of {@link Sound} objects
      */
-    public void attachListeners(ObservableList<Sound> sounds) {
+    public void attachSoundListeners(ObservableList<Sound> sounds) {
         for (Sound sound : sounds) {
             attachPropertyListeners(sound, sounds);
         }
@@ -71,7 +89,11 @@ public class ModelSerializer {
      * @param sounds the list of {@link Sound} objects to serialize
      */
     public void saveSounds(ObservableList<Sound> sounds) {
-        fileManager.saveSounds(sounds);
+        try {
+            serialize(new ArrayList<>(sounds), soundsFile);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     /**
@@ -81,15 +103,15 @@ public class ModelSerializer {
      * @return the list of {@link Sound} objects from storage
      */
     public ObservableList<Sound> loadSounds() {
-        boolean soundsFileExists = fileManager.soundsFileExists();
-        ObservableList<Sound> sounds = fileManager.loadSounds();
-
-        if (!soundsFileExists) {
-            sounds.add(Sounds.createBruhSound());
-            sounds.add(Sounds.createTacoBellSound());
+        try {
+            List<Sound> loadedList = deserialize(soundsFile, ArrayList.class);
+            if (loadedList != null) {
+                return FXCollections.observableArrayList(loadedList);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println(e.getMessage());
         }
-
-        return sounds;
+        return FXCollections.observableArrayList();
     }
 
     /**
@@ -99,7 +121,7 @@ public class ModelSerializer {
      *
      * @param settings the {@link Settings} object
      */
-    public void attachListeners(Settings settings) {
+    public void attachSettingsListeners(Settings settings) {
         settings.hearSoundsProperty().addListener((_, _, _) -> saveSettings(settings));
         settings.stopSoundsKeyCodeProperty().addListener((_, _, _) -> saveSettings(settings));
     }
@@ -110,7 +132,11 @@ public class ModelSerializer {
      * @param settings the {@link Settings} object to serialize
      */
     public void saveSettings(Settings settings) {
-        fileManager.saveSettings(settings);
+        try {
+            serialize(settings, settingsFile);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     /**
@@ -119,6 +145,54 @@ public class ModelSerializer {
      * @return the {@link Settings} object from storage
      */
     public Settings loadSettings() {
-        return fileManager.loadSettings();
+        try {
+            Settings settings = deserialize(settingsFile, Settings.class);
+            if (settings != null) {
+                return settings;
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println(e.getMessage());
+        }
+        return new Settings();
+    }
+
+    /**
+     * Checks if the sounds file exists.
+     *
+     * @return {@code true} if the sounds file exists, {@code false} otherwise
+     */
+    public boolean soundsFileExists() {
+        return soundsFile.exists();
+    }
+
+    /**
+     * Checks if the settings file exists.
+     *
+     * @return {@code true} if the settings file exists, {@code false} otherwise
+     */
+    public boolean settingsFileExists() {
+        return settingsFile.exists();
+    }
+
+    private <T extends Serializable> void serialize(T obj, File file) throws IOException {
+        File parentDir = file.getParentFile();
+        if (parentDir != null) {
+            parentDir.mkdirs();
+        }
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+            oos.writeObject(obj);
+        }
+    }
+
+    private <T extends Serializable> T deserialize(File file, Class<T> type) throws IOException, ClassNotFoundException {
+        if (!file.exists()) {
+            return null;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            Object obj = ois.readObject();
+            return type.cast(obj);
+        }
     }
 }
