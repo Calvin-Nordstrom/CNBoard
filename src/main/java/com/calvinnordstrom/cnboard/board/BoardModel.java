@@ -20,9 +20,15 @@ public class BoardModel {
         modelSerializer = new ModelSerializer();
 
         sounds = modelSerializer.loadSounds();
+        if (!modelSerializer.soundsFileExists()) {
+            modelSerializer.saveSounds(sounds);
+        }
         modelSerializer.attachSoundListeners(sounds);
 
         settings = modelSerializer.loadSettings();
+        if (!modelSerializer.settingsFileExists()) {
+            modelSerializer.saveSettings(settings);
+        }
         modelSerializer.attachSettingsListeners(settings);
 
         router.start();

@@ -1,9 +1,18 @@
 package com.calvinnordstrom.cnboard.board;
 
 import com.calvinnordstrom.cnboard.util.Resources;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jnativehook.keyboard.NativeKeyEvent;
 
 public class Sounds {
+    public static ObservableList<Sound> createDefaultSounds() {
+        ObservableList<Sound> sounds = FXCollections.observableArrayList();
+        sounds.add(createBruhSound());
+        sounds.add(createTacoBellSound());
+        return sounds;
+    }
+
     public static Sound createBruhSound() {
         return new Sound.Builder()
                 .title("Bruh")

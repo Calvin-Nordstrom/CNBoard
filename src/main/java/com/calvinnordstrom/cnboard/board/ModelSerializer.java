@@ -111,7 +111,7 @@ public class ModelSerializer {
         } catch (IOException | ClassNotFoundException e) {
             System.err.println(e.getMessage());
         }
-        return FXCollections.observableArrayList();
+        return Sounds.createDefaultSounds();
     }
 
     /**
