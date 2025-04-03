@@ -123,13 +123,13 @@ public class BoardView {
         KeybindControl stopSoundsControl = new KeybindControl("Stop all sounds", settings.stopSoundsKeyCodeProperty());
         GlobalScreen.addNativeKeyListener(stopSoundsControl);
 
-        VBox pane1 = new VBox(hearSoundsControl.asNode());
-        VBox pane2 = new VBox(stopSoundsControl.asNode());
-        HBox boardControlPane = new HBox(pane1, createVerticalDivider(), pane2);
+        Node node1 = new Pane(hearSoundsControl.asNode());
+        Node node2 = new Pane(stopSoundsControl.asNode());
+        HBox boardControlPane = new HBox(node1, createVerticalDivider(), node2);
         view.setBottom(boardControlPane);
 
-        pane1.getStyleClass().add("board-control");
-        pane2.getStyleClass().add("board-control");
+        node1.getStyleClass().add("board-control");
+        node2.getStyleClass().add("board-control");
         boardControlPane.getStyleClass().add("board-control-pane");
     }
 
