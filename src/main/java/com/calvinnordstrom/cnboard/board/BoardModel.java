@@ -6,8 +6,8 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
 
 public class BoardModel {
-    private final ObservableList<Sound> sounds;
-    private final Settings settings;
+    private ObservableList<Sound> sounds;
+    private Settings settings;
     private final AudioRouter router;
     private final InputHandler inputHandler;
     private final ModelSerializer modelSerializer;
@@ -19,19 +19,26 @@ public class BoardModel {
         inputHandler = new InputHandler(this);
         modelSerializer = new ModelSerializer();
 
+        resetSounds();
+        resetSettings();
+
+        router.start();
+    }
+
+    public void resetSounds() {
         sounds = modelSerializer.loadSounds();
         if (!modelSerializer.soundsFileExists()) {
             modelSerializer.saveSounds(sounds);
         }
         modelSerializer.attachSoundListeners(sounds);
+    }
 
+    public void resetSettings() {
         settings = modelSerializer.loadSettings();
         if (!modelSerializer.settingsFileExists()) {
             modelSerializer.saveSettings(settings);
         }
         modelSerializer.attachSettingsListeners(settings);
-
-        router.start();
     }
 
     /**
