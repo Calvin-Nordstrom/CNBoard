@@ -3,7 +3,7 @@ package com.calvinnordstrom.cnboard.model;
 import com.calvinnordstrom.cnboard.service.AudioRouter;
 import com.calvinnordstrom.cnboard.service.LocalAudioPlayer;
 import com.calvinnordstrom.cnboard.util.AudioUtils;
-import javafx.collections.FXCollections;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 
 import javax.sound.sampled.SourceDataLine;
@@ -47,23 +47,6 @@ public class BoardModel {
         modelSerializer.attachSettingsListeners(settings);
     }
 
-    /**
-     * Saves the model objects to storage, including the list of {@code Sound}
-     * objects and the {@code Settings} object.
-     */
-    public void saveModel() {
-        modelSerializer.saveSounds(sounds);
-        modelSerializer.saveSettings(settings);
-    }
-
-    public void keyPress(int keyCode) {
-        inputHandler.onKeyPressed(keyCode);
-    }
-
-    public void keyRelease(int keyCode) {
-        inputHandler.onKeyReleased(keyCode);
-    }
-
     public void addSound(Sound sound) {
         sounds.add(sound);
     }
@@ -73,7 +56,27 @@ public class BoardModel {
     }
 
     public ObservableList<Sound> getSounds() {
-        return FXCollections.unmodifiableObservableList(sounds);
+        return sounds;
+    }
+
+    public void restoreBruhSound() {
+        sounds.add(Sounds.createBruhSound());
+    }
+
+    public void restoreTacoBellSound() {
+        sounds.add(Sounds.createTacoBellSound());
+    }
+
+    public void restoreAllSounds() {
+        sounds.addAll(Sounds.createDefaultSounds());
+    }
+
+    public void keyPress(int keyCode) {
+        inputHandler.onKeyPressed(keyCode);
+    }
+
+    public void keyRelease(int keyCode) {
+        inputHandler.onKeyReleased(keyCode);
     }
 
     public void startLocalAudio(Sound sound) {
@@ -85,11 +88,13 @@ public class BoardModel {
         localAudioPlayer.stop();
     }
 
-    public Settings getSettings() {
-        return settings;
+    public void shutdown() {
+        router.stop();
+
+        Platform.exit();
     }
 
-    public AudioRouter getRouter() {
-        return router;
+    public Settings getSettings() {
+        return settings;
     }
 }

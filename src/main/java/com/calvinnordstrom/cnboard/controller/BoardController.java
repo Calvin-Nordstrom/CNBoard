@@ -1,7 +1,7 @@
 package com.calvinnordstrom.cnboard.controller;
 
-import com.calvinnordstrom.cnboard.model.Sound;
 import com.calvinnordstrom.cnboard.model.BoardModel;
+import com.calvinnordstrom.cnboard.model.Sound;
 
 public class BoardController {
     private final BoardModel model;
@@ -18,6 +18,18 @@ public class BoardController {
         model.removeSound(sound);
     }
 
+    public void restoreBruhSound() {
+        model.restoreBruhSound();
+    }
+
+    public void restoreTacoBellSound() {
+        model.restoreTacoBellSound();
+    }
+
+    public void restoreAllSounds() {
+        model.restoreAllSounds();
+    }
+
     public void keyPress(int keyCode) {
         model.keyPress(keyCode);
     }
@@ -32,5 +44,9 @@ public class BoardController {
 
     public void stopLocalAudio() {
         model.stopLocalAudio();
+    }
+
+    public void exit() {
+        model.shutdown();
     }
 }

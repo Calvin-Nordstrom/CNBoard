@@ -4,20 +4,18 @@ import com.calvinnordstrom.cnboard.controller.BoardController;
 import com.calvinnordstrom.cnboard.model.BoardModel;
 import com.calvinnordstrom.cnboard.model.Settings;
 import com.calvinnordstrom.cnboard.model.Sound;
+import com.calvinnordstrom.cnboard.util.Resources;
 import com.calvinnordstrom.cnboard.view.control.KeybindControl;
 import com.calvinnordstrom.cnboard.view.control.ToggleControl;
 import com.calvinnordstrom.cnboard.view.node.Divider;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import org.jnativehook.GlobalScreen;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +46,7 @@ public class BoardView {
     }
 
     private void initTop() {
-        BorderPane boardTop = new BorderPane();
+        MenuBar menuBar = createMenuBar();
 
         TextField searchBar = new TextField();
         searchBar.setPromptText("Search sounds");
@@ -59,19 +57,62 @@ public class BoardView {
 
         Button newButton = new Button("New Sound");
         newButton.setOnMouseClicked(_ -> {
-            SoundCreator soundCreator = new SoundCreator(model, controller, newButton.getScene().getWindow());
+            SoundCreator soundCreator = new SoundCreator(model, controller, view.getScene().getWindow());
             soundCreator.show();
         });
 
         HBox right = new HBox(searchBar, newButton);
+        BorderPane boardTop = new BorderPane();
         boardTop.setRight(right);
 
-        view.setTop(boardTop);
+        VBox top = new VBox(menuBar, boardTop);
 
-        boardTop.getStyleClass().add("board-top");
+        view.setTop(top);
+
+        boardTop.getStyleClass().add("board-top_pane");
         searchBar.getStyleClass().add("board-top_search-bar");
         newButton.getStyleClass().add("board-top_new-button");
         right.getStyleClass().add("board-top_right");
+    }
+
+    private MenuBar createMenuBar() {
+        MenuItem fileNew = new MenuItem("New...");
+        fileNew.setOnAction(_ -> {
+            SoundCreator soundCreator = new SoundCreator(model, controller, view.getScene().getWindow());
+            soundCreator.show();
+        });
+
+        MenuItem fileRestoreBruh = new MenuItem("Bruh", createMenuItemGraphic(Resources.BRUH_ICON_FILE));
+        fileRestoreBruh.setOnAction(_ -> {
+            controller.restoreBruhSound();
+            setSelectedSound(model.getSounds().getLast());
+        });
+        MenuItem fileRestoreTacoBell = new MenuItem("Taco Bell", createMenuItemGraphic(Resources.TACO_BELL_ICON_FILE));
+        fileRestoreTacoBell.setOnAction(_ -> {
+            controller.restoreTacoBellSound();
+            setSelectedSound(model.getSounds().getLast());
+        });
+        MenuItem fileRestoreAll = new MenuItem("All Sounds");
+        fileRestoreAll.setOnAction(_ -> {
+            controller.restoreAllSounds();
+            setSelectedSound(model.getSounds().getLast());
+        });
+        Menu fileRestore = new Menu("Restore", null, fileRestoreBruh, fileRestoreTacoBell, fileRestoreAll);
+
+        MenuItem fileExit = new MenuItem("Exit");
+        fileExit.setOnAction(_ -> controller.exit());
+
+        Menu fileMenu = new Menu("File", null, fileNew, fileRestore, new SeparatorMenuItem(), fileExit);
+
+        return new MenuBar(fileMenu);
+    }
+
+    private ImageView createMenuItemGraphic(File file) {
+        ImageView icon = new ImageView(Resources.getImage(file));
+        icon.setFitWidth(16);
+        icon.setFitHeight(16);
+        icon.setPreserveRatio(true);
+        return icon;
     }
 
     private void initCenter() {

@@ -154,6 +154,64 @@
   -fx-border-width: 1;
 }
 
+.menu-bar {
+  -fx-background-color: -cn-pane-color3;
+  -fx-border-color: -cn-border-color;
+  -fx-border-width: 0 0 1 0;
+}
+
+.menu-bar .label {
+  -fx-text-fill: -cn-text-color1;
+  -fx-font-size: 14;
+}
+
+.menu {
+  -fx-background-color: transparent;
+  -fx-text-fill: -cn-text-color1;
+  -fx-font-size: 14;
+}
+
+.menu:hover {
+  -fx-background-color: -cn-control-hovered-bg-color1;
+}
+
+.menu:showing {
+  -fx-background-color: -cn-control-hovered-bg-color2;
+}
+
+.menu-item {
+  -fx-background-color: -cn-control-bg-color;
+  -fx-text-fill: -cn-text-color1;
+  -fx-padding: 5 10 5 10;
+  -fx-font-size: 14;
+}
+
+.menu-item:hover {
+  -fx-background-color: -cn-control-hovered-bg-color1;
+  -fx-text-fill: -cn-text-color2;
+}
+
+.menu-item:focused {
+  -fx-background-color: -cn-control-hovered-bg-color2;
+  -fx-text-fill: -cn-text-color2;
+}
+
+.menu-item:disabled {
+  -fx-text-fill: -cn-gray1;
+}
+
+.menu-item > .graphic {
+  -fx-padding: 0 8 0 0;
+}
+
+.context-menu {
+  -fx-background-color: -cn-control-bg-color;
+  -fx-border-color: -cn-border-color;
+  -fx-border-width: 1;
+}
+
+/* Custom class definitions */
+
 .button-width-100 {
   -fx-min-width: 100;
 }
@@ -331,7 +389,7 @@
   -fx-padding: 10;
 }
 
-.board-top {
+.board-top_pane {
   -fx-background-color: -cn-pane-color2;
   -fx-border-style: solid;
   -fx-border-width: 0 0 1 0;
