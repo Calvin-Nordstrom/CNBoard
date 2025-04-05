@@ -12,30 +12,44 @@ public class AudioUtils {
             44100, // Frame rate (Hz)
             false  // Little-endian
     );
-    private static final DataLine.Info DATA_LINE_INFO = new DataLine.Info(SourceDataLine.class, DEFAULT_FORMAT);
+    private static final DataLine.Info TARGET_DATA_LINE_INFO = new DataLine.Info(TargetDataLine.class, DEFAULT_FORMAT);
+    private static final DataLine.Info SOURCE_DATA_LINE_INFO = new DataLine.Info(SourceDataLine.class, DEFAULT_FORMAT);
 
     public static TargetDataLine getDefaultTarget() {
         try {
-            DataLine.Info micInfo = new DataLine.Info(TargetDataLine.class, DEFAULT_FORMAT);
-            if (!AudioSystem.isLineSupported(micInfo)) {
+            if (!AudioSystem.isLineSupported(TARGET_DATA_LINE_INFO)) {
                 return null;
             }
-            return (TargetDataLine) AudioSystem.getLine(micInfo);
+            return (TargetDataLine) AudioSystem.getLine(TARGET_DATA_LINE_INFO);
         } catch (LineUnavailableException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
         }
+        return null;
     }
 
     public static SourceDataLine getDefaultSource() {
-        try {
-            for (Mixer.Info info : AudioSystem.getMixerInfo()) {
-                System.out.println(info);
-            }
+//        try {
+//            for (Mixer.Info info : AudioSystem.getMixerInfo()) {
+//                System.out.println(info);
+//            }
+//
+//            Mixer.Info mixerInfo = AudioSystem.getMixerInfo()[0];
+//            Mixer mixer = AudioSystem.getMixer(mixerInfo);
+////            return (SourceDataLine) mixer.getLine(mixer.getLineInfo());
+//            return (SourceDataLine) AudioSystem.getLine(DATA_LINE_INFO);
 
-            Mixer.Info mixerInfo = AudioSystem.getMixerInfo()[0];
-            Mixer mixer = AudioSystem.getMixer(mixerInfo);
-//            return (SourceDataLine) mixer.getLine(mixer.getLineInfo());
-            return (SourceDataLine) AudioSystem.getLine(DATA_LINE_INFO);
+//            Mixer.Info mixerInfo = AudioSystem.getMixerInfo()[0];
+//            Mixer mixer = AudioSystem.getMixer(mixerInfo);
+//            return (SourceDataLine) mixer.getLine(SOURCE_DATA_LINE_INFO);
+//        } catch (LineUnavailableException e) {
+//            System.err.println(e.getMessage());
+//        }
+
+        try {
+            if (!AudioSystem.isLineSupported(SOURCE_DATA_LINE_INFO)) {
+                return null;
+            }
+            return (SourceDataLine) AudioSystem.getLine(SOURCE_DATA_LINE_INFO);
         } catch (LineUnavailableException e) {
             System.err.println(e.getMessage());
         }
@@ -49,7 +63,7 @@ public class AudioUtils {
                 return null;
             }
             Mixer mixer = AudioSystem.getMixer(mixerInfo);
-            return (SourceDataLine) mixer.getLine(DATA_LINE_INFO);
+            return (SourceDataLine) mixer.getLine(SOURCE_DATA_LINE_INFO);
         } catch (LineUnavailableException e) {
             System.err.println(e.getMessage());
         }
@@ -58,7 +72,7 @@ public class AudioUtils {
 
     public static Mixer.Info getMixerInfoByName(String name) {
         for (Mixer.Info info : AudioSystem.getMixerInfo()) {
-            if (info.getName().equalsIgnoreCase(name)) {
+            if (info.getName().contains(name)) {
                 return info;
             }
         }

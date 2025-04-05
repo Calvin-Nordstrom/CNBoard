@@ -1,5 +1,6 @@
 package com.calvinnordstrom.cnboard.board;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javax.sound.sampled.SourceDataLine;
@@ -67,7 +68,7 @@ public class BoardModel {
     }
 
     public ObservableList<Sound> getSounds() {
-        return sounds;
+        return FXCollections.unmodifiableObservableList(sounds);
     }
 
     public Settings getSettings() {
