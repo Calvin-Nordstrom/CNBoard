@@ -1,4 +1,4 @@
-package com.calvinnordstrom.cnboard.view;
+package com.calvinnordstrom.cnboard.view.control;
 
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;

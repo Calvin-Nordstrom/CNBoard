@@ -1,4 +1,4 @@
-package com.calvinnordstrom.cnboard.view;
+package com.calvinnordstrom.cnboard.view.control;
 
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;

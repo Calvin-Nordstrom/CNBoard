@@ -23,4 +23,6 @@ module com.calvinnordstrom.cnboard {
     opens com.calvinnordstrom.cnboard.view to javafx.fxml;
     exports com.calvinnordstrom.cnboard.service;
     opens com.calvinnordstrom.cnboard.service to javafx.fxml;
+    exports com.calvinnordstrom.cnboard.view.control;
+    opens com.calvinnordstrom.cnboard.view.control to javafx.fxml;
 }
