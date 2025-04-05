@@ -19,11 +19,12 @@ public class BoardModel {
         TargetDataLine inputLine = AudioUtils.getDefaultTarget();
         SourceDataLine outputLine = AudioUtils.getSourceByName("CABLE Input (VB-Audio Virtual Cable)");
         router = new AudioRouter(inputLine, outputLine);
-        inputHandler = new InputHandler(this);
         modelSerializer = new ModelSerializer();
 
         resetSounds();
         resetSettings();
+
+        inputHandler = new InputHandler(sounds, settings, router);
 
         router.start();
     }

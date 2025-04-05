@@ -4,6 +4,7 @@ import com.calvinnordstrom.cnboard.service.AudioRouter;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,34 +17,39 @@ import java.util.Set;
  * press events can fire too rapidly to be useful for sound injection.
  */
 public class InputHandler {
-    private final BoardModel model;
+    private final List<Sound> sounds;
+    private final Settings settings;
+    private final AudioRouter router;
     private final Set<Integer> activeKeys = new HashSet<>();
 
     /**
-     * Constructs an {@code InputHandler} with the specified board model.
+     * Constructs an {@code InputHandler} with the specified sounds, settings,
+     * and router to inject audio to.
      *
-     * @param model the {@code BoardModel} used to retrieve settings, sounds, and audio routing.
+     * @param sounds the sounds to check input against
+     * @param settings the settings to control playback
+     * @param router the router to route audio to
      */
-    public InputHandler(BoardModel model) {
-        this.model = model;
+    public InputHandler(List<Sound> sounds, Settings settings, AudioRouter router) {
+        this.sounds = sounds;
+        this.settings = settings;
+        this.router = router;
     }
 
     /**
-     * Handles key press events, triggering sound injection if the key is associated with a sound.
-     * If the key matches the stop-sound key, all ongoing sound injections are stopped.
+     * Handles key press events, triggering sound injection if the key is
+     * associated with a sound. If the key matches the stop-sound key, all
+     * ongoing sound injections are stopped.
      *
      * @param keyCode the key code of the pressed key.
      */
     public void onKeyPressed(int keyCode) {
-        Settings settings = model.getSettings();
-        AudioRouter router = model.getRouter();
-
         if (keyCode == settings.getStopSoundsKeyCode()) {
             router.stopInjection();
         }
 
         if (!activeKeys.contains(keyCode)) {
-            for (Sound sound : model.getSounds()) {
+            for (Sound sound : sounds) {
                 if (sound.getKeyCode() == keyCode) {
                     if (sound.isEnabled()) {
                         File soundFile = sound.getSoundFile();
@@ -61,7 +67,8 @@ public class InputHandler {
     }
 
     /**
-     * Handles key release events, removing the key from the set of active keys.
+     * Handles key release events, removing the key from the set of active
+     * keys.
      *
      * @param keyCode the key code of the released key.
      */
