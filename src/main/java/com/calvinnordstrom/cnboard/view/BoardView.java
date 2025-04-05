@@ -1,29 +1,23 @@
 package com.calvinnordstrom.cnboard.view;
 
-import com.calvinnordstrom.cnboard.model.Settings;
-import com.calvinnordstrom.cnboard.model.Sound;
 import com.calvinnordstrom.cnboard.controller.BoardController;
 import com.calvinnordstrom.cnboard.model.BoardModel;
-import com.calvinnordstrom.cnboard.service.LocalAudioPlayer;
-import com.calvinnordstrom.cnboard.util.Resources;
-import com.calvinnordstrom.cnboard.view.control.*;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import com.calvinnordstrom.cnboard.model.Settings;
+import com.calvinnordstrom.cnboard.model.Sound;
+import com.calvinnordstrom.cnboard.view.control.KeybindControl;
+import com.calvinnordstrom.cnboard.view.control.ToggleControl;
+import com.calvinnordstrom.cnboard.view.node.Divider;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import org.jnativehook.GlobalScreen;
-import org.jnativehook.keyboard.NativeKeyEvent;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +28,6 @@ public class BoardView {
     private final BoardController controller;
     private final BorderPane view = new BorderPane();
     private final FlowPane soundsPane = new FlowPane();
-    private final LocalAudioPlayer localAudioPlayer = new LocalAudioPlayer();
     private final Map<Sound, SoundNode> soundNodes = new HashMap<>();
     private final Map<Sound, SoundControl> soundControls = new HashMap<>();
     private String searchText;
@@ -66,7 +59,7 @@ public class BoardView {
 
         Button newButton = new Button("New Sound");
         newButton.setOnMouseClicked(_ -> {
-            SoundCreator soundCreator = new SoundCreator(newButton.getScene().getWindow());
+            SoundCreator soundCreator = new SoundCreator(model, controller, newButton.getScene().getWindow());
             soundCreator.show();
         });
 
@@ -115,7 +108,7 @@ public class BoardView {
 
         Node node1 = new HBox(hearSoundsControl.asNode());
         Node node2 = new HBox(stopSoundsControl.asNode());
-        HBox boardControlPane = new HBox(node1, createVerticalDivider(), node2);
+        HBox boardControlPane = new HBox(node1, Divider.vertical(), node2);
         view.setBottom(boardControlPane);
 
         node1.getStyleClass().add("board-control");
@@ -160,7 +153,7 @@ public class BoardView {
                 return;
             }
 
-            localAudioPlayer.stop();
+            controller.stopLocalAudio();
 
             SoundControl soundControl = soundControls.get(sound);
             Region content = (Region) soundControl.asNode();
@@ -198,7 +191,7 @@ public class BoardView {
             soundNodes.clear();
         }
         for (Sound sound : model.getSounds()) {
-            soundNodes.put(sound, new SoundNode(sound));
+            soundNodes.put(sound, new SoundNode(model, controller, sound));
         }
     }
 
@@ -207,227 +200,12 @@ public class BoardView {
             soundControls.clear();
         }
         for (Sound sound : model.getSounds()) {
-            soundControls.put(sound, new SoundControl(sound));
+            soundControls.put(sound, new SoundControl(model, controller, sound));
         }
     }
 
     public Node asNode() {
         return view;
-    }
-
-    private static class SoundNode {
-        private final Sound sound;
-        private final VBox view = new VBox();
-
-        public SoundNode(Sound sound) {
-            this.sound = sound;
-
-            init();
-        }
-
-        private void init() {
-            Image icon = getImage(sound.getIconFile());
-            ImageView iconView = new ImageView(icon);
-            iconView.setFitWidth(80);
-            iconView.setFitHeight(80);
-            iconView.setSmooth(true);
-            sound.iconFileProperty().addListener((_, _, newValue) -> {
-                Image image = getImage(newValue);
-                iconView.setImage(image);
-            });
-
-            Label titleLabel = new Label(sound.getTitle());
-            titleLabel.textProperty().bind(sound.titleProperty());
-
-            String keyCode = NativeKeyEvent.getKeyText(sound.getKeyCode());
-            Label keyCodeLabel = new Label(keyCode);
-            sound.keyCodeProperty().addListener((_, _, newValue) -> {
-                keyCodeLabel.setText(NativeKeyEvent.getKeyText((int) newValue));
-            });
-
-            view.getChildren().addAll(iconView, titleLabel, keyCodeLabel);
-
-            view.getStyleClass().add("sound-node");
-            iconView.getStyleClass().add("sound-node_icon-view");
-            titleLabel.getStyleClass().addAll("title", "sound-node_title");
-        }
-
-        public Node asNode() {
-            return view;
-        }
-    }
-
-    private class SoundControl {
-        private final Sound sound;
-        private final VBox view = new VBox();
-
-        public SoundControl(Sound sound) {
-            this.sound = sound;
-
-            init();
-        }
-
-        private void init() {
-            Label title = new Label("Sound Editor");
-
-            Image icon = getImage(sound.getIconFile());
-            ImageView iconView = new ImageView(icon);
-            iconView.setFitWidth(160);
-            iconView.setFitHeight(160);
-            iconView.setSmooth(true);
-            sound.iconFileProperty().addListener((_, _, newValue) -> {
-                Image image = getImage(newValue);
-                iconView.setImage(image);
-            });
-
-            StringControl titleControl = new StringControl("Title", sound.titleProperty());
-
-            KeybindControl keybindControl = new KeybindControl("Keybind", sound.keyCodeProperty());
-            GlobalScreen.addNativeKeyListener(keybindControl);
-
-            ToggleControl enabledControl = new ToggleControl("Enabled", sound.enabledProperty());
-
-            FileChooser.ExtensionFilter soundFilter = new FileChooser.ExtensionFilter("WAV Files", "*.wav");
-            FileControl soundFileControl = new FileControl("Sound file", sound.soundFileProperty(), soundFilter);
-
-            FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.bmp");
-            FileControl iconFileControl = new FileControl("Icon file", sound.iconFileProperty(), imageFilter);
-
-            SliderControl volumeControl = new SliderControl("Volume", 0, 100, sound.volumeProperty(), "%");
-
-            Button startButton = new Button("Start");
-            startButton.setOnMouseClicked(_ -> {
-                float volume = (float) sound.getVolume() / 100;
-                localAudioPlayer.start(sound.getSoundFile(), volume);
-            });
-            Button stopButton = new Button("Stop");
-            stopButton.setOnMouseClicked(_ -> localAudioPlayer.stop());
-            HBox playbackControl = new HBox(startButton, stopButton);
-
-            Button deleteButton = new Button("Delete");
-            deleteButton.setOnMouseClicked(_ -> {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete \"" + sound.getTitle() + "\"?");
-                alert.showAndWait()
-                        .filter(response -> response == ButtonType.OK)
-                        .ifPresent(_ -> controller.removeSound(sound));
-            });
-            HBox deleteControl = new HBox(deleteButton);
-
-            view.getChildren().addAll(title, iconView, titleControl.asNode(), keybindControl.asNode(), enabledControl.asNode(), soundFileControl.asNode(), iconFileControl.asNode(), volumeControl.asNode(), playbackControl, createHorizontalDivider(), deleteControl);
-
-            view.getStyleClass().add("sound-control");
-            title.getStyleClass().add("sound-control_title");
-            iconView.getStyleClass().add("sound-control_icon-view");
-            playbackControl.getStyleClass().add("sound-control_playback-control");
-            deleteButton.getStyleClass().add("sound-control_delete-button");
-            deleteControl.getStyleClass().add("sound-control_delete-control");
-        }
-
-        public Node asNode() {
-            return view;
-        }
-    }
-
-    private class SoundCreator {
-        private static final String TITLE = "Upload Sound";
-        private final Window owner;
-        private final Stage stage = new Stage();
-        private final Label errorLabel = new Label();
-        private Scene scene;
-
-        public SoundCreator(Window owner) {
-            this.owner = owner;
-
-            init();
-        }
-
-        private void init() {
-            stage.initOwner(owner);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.setTitle(TITLE);
-            stage.setResizable(false);
-
-            ObjectProperty<File> fileProperty = new SimpleObjectProperty<>();
-            FileChooser.ExtensionFilter soundFilter = new FileChooser.ExtensionFilter("WAV Files", "*.wav");
-            FileControl fileControl = new FileControl("Sound file", fileProperty, soundFilter);
-            fileProperty.addListener((_, _, _) -> {
-                errorLabel.setVisible(false);
-            });
-
-            errorLabel.setVisible(false);
-
-            VBox vBox = new VBox(fileControl.asNode(), errorLabel);
-
-            BorderPane borderPane = new BorderPane();
-            Button okButton = getOkButton(fileProperty);
-            Button cancelButton = new Button("Cancel");
-            cancelButton.setOnMouseClicked(_ -> hide());
-            HBox right = new HBox(okButton, cancelButton);
-            borderPane.setRight(right);
-
-            VBox content = new VBox(vBox, createHorizontalDivider(), borderPane);
-            Pane root = new Pane(content);
-
-            scene = new Scene(root);
-            scene.getStylesheets().add(Resources.STYLES_PATH);
-
-            errorLabel.getStyleClass().add("sound-creator_error-label");
-            vBox.getStyleClass().add("sound-creator_vBox");
-            content.getStyleClass().add("sound-creator_content");
-            right.getStyleClass().add("sound-creator_right");
-            okButton.getStyleClass().add("button-width-100");
-            cancelButton.getStyleClass().add("button-width-100");
-        }
-
-        private Button getOkButton(ObjectProperty<File> fileProperty) {
-            Button button = new Button("OK");
-            button.setOnMouseClicked(_ -> {
-                Sound.Builder builder = new Sound.Builder();
-                builder.soundFile(fileProperty.get());
-                try {
-                    Sound sound = builder.build();
-                    controller.addSound(sound);
-                    hide();
-                } catch (IllegalArgumentException e) {
-                    errorLabel.setText(e.getMessage());
-                    errorLabel.setVisible(true);
-                }
-            });
-            return button;
-        }
-
-        public void show() {
-            if (scene != null) {
-                stage.setScene(scene);
-                stage.sizeToScene();
-            }
-            stage.show();
-        }
-
-        public void hide() {
-            stage.hide();
-            stage.setScene(null);
-        }
-    }
-
-    private static Image getImage(File file) {
-        if (file != null && file.exists()) {
-            return new Image(file.getAbsolutePath());
-        } else {
-            return new Image(Resources.DEFAULT_ICON_FILE.getAbsolutePath());
-        }
-    }
-
-    private static Pane createHorizontalDivider() {
-        Pane divider = new Pane();
-        divider.getStyleClass().add("horizontal-divider");
-        return divider;
-    }
-
-    private static Pane createVerticalDivider() {
-        Pane divider = new Pane();
-        divider.getStyleClass().add("vertical-divider");
-        return divider;
     }
 
     private static ScrollPane createScrollPane(Node content) {

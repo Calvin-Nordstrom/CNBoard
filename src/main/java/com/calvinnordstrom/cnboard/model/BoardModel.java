@@ -1,6 +1,7 @@
 package com.calvinnordstrom.cnboard.model;
 
 import com.calvinnordstrom.cnboard.service.AudioRouter;
+import com.calvinnordstrom.cnboard.service.LocalAudioPlayer;
 import com.calvinnordstrom.cnboard.util.AudioUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +15,7 @@ public class BoardModel {
     private final AudioRouter router;
     private final InputHandler inputHandler;
     private final ModelSerializer modelSerializer;
+    private final LocalAudioPlayer localAudioPlayer = new LocalAudioPlayer();
 
     public BoardModel() {
         TargetDataLine inputLine = AudioUtils.getDefaultTarget();
@@ -72,6 +74,15 @@ public class BoardModel {
 
     public ObservableList<Sound> getSounds() {
         return FXCollections.unmodifiableObservableList(sounds);
+    }
+
+    public void startLocalAudio(Sound sound) {
+        float volume = (float) (sound.getVolume() / 100);
+        localAudioPlayer.start(sound.getSoundFile(), volume);
+    }
+
+    public void stopLocalAudio() {
+        localAudioPlayer.stop();
     }
 
     public Settings getSettings() {

@@ -25,4 +25,12 @@ public class BoardController {
     public void keyRelease(int keyCode) {
         model.keyRelease(keyCode);
     }
+
+    public void startLocalAudio(Sound sound) {
+        model.startLocalAudio(sound);
+    }
+
+    public void stopLocalAudio() {
+        model.stopLocalAudio();
+    }
 }
