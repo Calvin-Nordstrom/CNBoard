@@ -1,4 +1,4 @@
-package com.calvinnordstrom.cnboard.board;
+package com.calvinnordstrom.cnboard.model;
 
 import com.calvinnordstrom.cnboard.util.Resources;
 import javafx.collections.FXCollections;

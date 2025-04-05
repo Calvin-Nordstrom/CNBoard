@@ -1,4 +1,4 @@
-package com.calvinnordstrom.cnboard.board;
+package com.calvinnordstrom.cnboard.model;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;

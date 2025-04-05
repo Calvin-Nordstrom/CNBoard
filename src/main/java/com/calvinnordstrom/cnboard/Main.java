@@ -1,9 +1,9 @@
 package com.calvinnordstrom.cnboard;
 
-import com.calvinnordstrom.cnboard.board.BoardController;
-import com.calvinnordstrom.cnboard.board.BoardModel;
-import com.calvinnordstrom.cnboard.board.BoardView;
-import com.calvinnordstrom.cnboard.board.KeyListener;
+import com.calvinnordstrom.cnboard.controller.BoardController;
+import com.calvinnordstrom.cnboard.model.BoardModel;
+import com.calvinnordstrom.cnboard.view.BoardView;
+import com.calvinnordstrom.cnboard.controller.KeyListener;
 import com.calvinnordstrom.cnboard.util.Resources;
 import javafx.application.Application;
 import javafx.application.Platform;

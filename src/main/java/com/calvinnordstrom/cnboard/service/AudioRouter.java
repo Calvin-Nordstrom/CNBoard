@@ -1,6 +1,4 @@
-package com.calvinnordstrom.cnboard.board;
-
-import com.calvinnordstrom.cnboard.util.LocalAudioPlayer;
+package com.calvinnordstrom.cnboard.service;
 
 import javax.sound.sampled.*;
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.calvinnordstrom.cnboard.board;
+package com.calvinnordstrom.cnboard.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;

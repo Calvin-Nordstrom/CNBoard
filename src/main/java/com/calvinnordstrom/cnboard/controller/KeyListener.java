@@ -1,4 +1,4 @@
-package com.calvinnordstrom.cnboard.board;
+package com.calvinnordstrom.cnboard.controller;
 
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;

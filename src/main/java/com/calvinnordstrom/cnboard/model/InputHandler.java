@@ -1,4 +1,6 @@
-package com.calvinnordstrom.cnboard.board;
+package com.calvinnordstrom.cnboard.model;
+
+import com.calvinnordstrom.cnboard.service.AudioRouter;
 
 import java.io.File;
 import java.util.HashSet;

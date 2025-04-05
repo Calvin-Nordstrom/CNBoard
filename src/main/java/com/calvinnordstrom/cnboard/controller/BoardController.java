@@ -1,4 +1,7 @@
-package com.calvinnordstrom.cnboard.board;
+package com.calvinnordstrom.cnboard.controller;
+
+import com.calvinnordstrom.cnboard.model.Sound;
+import com.calvinnordstrom.cnboard.model.BoardModel;
 
 public class BoardController {
     private final BoardModel model;

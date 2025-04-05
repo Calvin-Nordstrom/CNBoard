@@ -1,8 +1,11 @@
-package com.calvinnordstrom.cnboard.board;
+package com.calvinnordstrom.cnboard.view;
 
-import com.calvinnordstrom.cnboard.util.LocalAudioPlayer;
+import com.calvinnordstrom.cnboard.model.Settings;
+import com.calvinnordstrom.cnboard.model.Sound;
+import com.calvinnordstrom.cnboard.controller.BoardController;
+import com.calvinnordstrom.cnboard.model.BoardModel;
+import com.calvinnordstrom.cnboard.service.LocalAudioPlayer;
 import com.calvinnordstrom.cnboard.util.Resources;
-import com.calvinnordstrom.cnboard.view.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;

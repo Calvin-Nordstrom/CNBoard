@@ -1,5 +1,7 @@
-package com.calvinnordstrom.cnboard.board;
+package com.calvinnordstrom.cnboard.model;
 
+import com.calvinnordstrom.cnboard.service.AudioRouter;
+import com.calvinnordstrom.cnboard.util.AudioUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

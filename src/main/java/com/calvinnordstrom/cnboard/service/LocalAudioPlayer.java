@@ -1,4 +1,4 @@
-package com.calvinnordstrom.cnboard.util;
+package com.calvinnordstrom.cnboard.service;
 
 import javax.sound.sampled.*;
 import java.io.File;
