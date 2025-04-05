@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
+import java.util.Objects;
+
 public class KeybindControl implements NativeKeyListener {
     private static final String DEFAULT_TEXT = "Set keybind";
     private static final String WAITING_TEXT = "Type a key...";
@@ -21,7 +23,7 @@ public class KeybindControl implements NativeKeyListener {
     private boolean waitingForKey = false;
 
     public KeybindControl(String text, IntegerProperty value) {
-        this.value = value;
+        this.value = Objects.requireNonNull(value);
         label = new Label(text);
         keyCodeLabel = new Label(NativeKeyEvent.getKeyText(value.get()));
 

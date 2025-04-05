@@ -9,6 +9,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import java.util.Objects;
+
 public class SliderControl {
     private final DoubleProperty value;
     private final VBox view = new VBox();
@@ -18,7 +20,7 @@ public class SliderControl {
     private final Label symbolLabel;
 
     public SliderControl(String text, double min, double max, DoubleProperty value, String symbol) {
-        this.value = value;
+        this.value = Objects.requireNonNull(value);
         label = new Label(text);
         slider = new Slider(min, max, value.get());
         textField = new TextField(format(value.get()));

@@ -8,6 +8,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import java.util.Objects;
+
 public class StringControl {
     private final StringProperty value;
     private final VBox view = new VBox();
@@ -15,7 +17,7 @@ public class StringControl {
     private final TextField textField;
 
     public StringControl(String text, StringProperty value) {
-        this.value = value;
+        this.value = Objects.requireNonNull(value);
         label = new Label(text);
         textField = new TextField(value.get());
 

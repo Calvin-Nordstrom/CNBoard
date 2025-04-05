@@ -11,6 +11,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.io.File;
+import java.util.Objects;
 
 public class FileControl {
     private final ObjectProperty<File> value;
@@ -23,7 +24,7 @@ public class FileControl {
 
     public FileControl(String text, ObjectProperty<File> value,
                        FileChooser.ExtensionFilter filter) {
-        this.value = value;
+        this.value = Objects.requireNonNull(value);
         this.filter = filter;
         label = new Label(text);
         initialName = value.get() == null ? "No file selected" : value.get().getName();

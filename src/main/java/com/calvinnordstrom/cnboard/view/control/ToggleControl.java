@@ -5,13 +5,15 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 
+import java.util.Objects;
+
 public class ToggleControl {
     private final BooleanProperty value;
     private final HBox view = new HBox();
     private final CheckBox checkBox;
 
     public ToggleControl(String text, BooleanProperty value) {
-        this.value = value;
+        this.value = Objects.requireNonNull(value);
         checkBox = new CheckBox(text);
         checkBox.setSelected(value.get());
 
