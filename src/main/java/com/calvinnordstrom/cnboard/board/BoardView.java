@@ -42,9 +42,7 @@ public class BoardView {
 
         init();
         initTop();
-        initLeft();
         initCenter();
-        initRight();
         initBottom();
     }
 
@@ -79,10 +77,6 @@ public class BoardView {
         right.getStyleClass().add("board-top_right");
     }
 
-    private void initLeft() {
-
-    }
-
     private void initCenter() {
         populateSoundNodes();
         populateSoundControls();
@@ -90,10 +84,6 @@ public class BoardView {
         model.getSounds().addListener((ListChangeListener<Sound>) c -> {
             populateSoundNodes();
             populateSoundControls();
-//            renderSounds(true);
-//            if (c.wasAdded()) {
-//                setSelectedSound(model.getSounds().getLast());
-//            }
 
             while (c.next()) {
                 if (c.wasRemoved()) {
@@ -111,10 +101,6 @@ public class BoardView {
 
         soundsPane.getStyleClass().add("sounds-pane");
         scrollPane.getStyleClass().add("sounds-pane_scroll-pane");
-    }
-
-    private void initRight() {
-
     }
 
     private void initBottom() {
@@ -262,10 +248,6 @@ public class BoardView {
             titleLabel.getStyleClass().addAll("title", "sound-node_title");
         }
 
-        public Sound getSound() {
-            return sound;
-        }
-
         public Node asNode() {
             return view;
         }
@@ -335,10 +317,6 @@ public class BoardView {
             playbackControl.getStyleClass().add("sound-control_playback-control");
             deleteButton.getStyleClass().add("sound-control_delete-button");
             deleteControl.getStyleClass().add("sound-control_delete-control");
-        }
-
-        public Sound getSound() {
-            return sound;
         }
 
         public Node asNode() {
