@@ -1,10 +1,10 @@
 package com.calvinnordstrom.cnboard;
 
 import com.calvinnordstrom.cnboard.controller.BoardController;
-import com.calvinnordstrom.cnboard.model.BoardModel;
-import com.calvinnordstrom.cnboard.view.BoardView;
 import com.calvinnordstrom.cnboard.controller.KeyListener;
+import com.calvinnordstrom.cnboard.model.BoardModel;
 import com.calvinnordstrom.cnboard.util.Resources;
+import com.calvinnordstrom.cnboard.view.BoardView;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -15,14 +15,8 @@ import javafx.stage.Stage;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 public class Main extends Application {
     private static final Logger LOGGER = Logger.getLogger(Main.class.getPackageName());
@@ -93,34 +87,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        printLineCount();
-
         launch(args);
-    }
-
-    private static void printLineCount() {
-        Path rootDir = Paths.get("C:\\Users\\calno\\Desktop\\IntelliJ Projects\\CNBoard\\src\\main\\java\\com\\calvinnordstrom\\cnboard");
-        try (Stream<Path> paths = Files.walk(rootDir)) {
-            long totalLines = paths
-                    .filter(Files::isRegularFile)
-                    .filter(path -> path.toString().endsWith(".java"))
-                    .mapToLong(Main::countLinesInFile)
-                    .sum();
-            System.out.println(totalLines + " total lines of code");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static long countLinesInFile(Path path) {
-        long lineCount = 0;
-        try (BufferedReader reader = Files.newBufferedReader(path)) {
-            while (reader.readLine() != null) {
-                lineCount++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return lineCount;
     }
 }
